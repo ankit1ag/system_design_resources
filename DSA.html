@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA GOD PLAN — 60 Days to Big Tech</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #00ff88;
+    --accent2: #ff6b35;
+    --accent3: #7c3aed;
+    --accent4: #0ea5e9;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --gold: #fbbf24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+  /* HEADER */
+  .hero {
+    position: relative;
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    background: radial-gradient(ellipse at 20% 50%, rgba(0,255,136,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(124,58,237,0.08) 0%, transparent 50%);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(48px, 8vw, 100px);
+    letter-spacing: 4px;
+    line-height: 0.9;
+    background: linear-gradient(135deg, #00ff88, #0ea5e9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero h1 span { color: var(--accent2); -webkit-text-fill-color: var(--accent2); }
+  .hero-sub { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--muted); margin-top: 12px; letter-spacing: 2px; }
+  .badge { background: var(--accent); color: #000; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; padding: 6px 14px; letter-spacing: 2px; border-radius: 2px; display: inline-block; }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex; gap: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    padding: 0 40px;
+  }
+  .nav-tab {
+    padding: 16px 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN CONTENT */
+  .main { max-width: 1400px; margin: 0 auto; padding: 40px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .card.green::before { background: var(--accent); }
+  .card.orange::before { background: var(--accent2); }
+  .card.purple::before { background: var(--accent3); }
+  .card.blue::before { background: var(--accent4); }
+  .card.gold::before { background: var(--gold); }
+
+  .card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .card h2 { font-size: 22px; font-weight: 600; margin-bottom: 16px; }
+  .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+
+  /* GRID LAYOUTS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media(max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin: 12px 0;
+    position: relative;
+  }
+  .code-block .kw { color: #c084fc; }
+  .code-block .fn { color: #60a5fa; }
+  .code-block .str { color: #4ade80; }
+  .code-block .num { color: #fb923c; }
+  .code-block .cmt { color: #6b7280; font-style: italic; }
+  .code-block .var { color: #f8fafc; }
+  .code-block .type { color: #38bdf8; }
+
+  /* PATTERN CARDS */
+  .pattern-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pattern-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .pattern-card .pnum {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 36px;
+    color: var(--border);
+    float: right;
+    line-height: 1;
+  }
+  .pattern-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--accent); }
+  .pattern-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .pattern-card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+  .tag.easy { background: rgba(0,255,136,0.1); color: var(--accent); }
+  .tag.medium { background: rgba(251,191,36,0.1); color: var(--gold); }
+  .tag.hard { background: rgba(255,107,53,0.1); color: var(--accent2); }
+  .tag.pattern { background: rgba(124,58,237,0.15); color: #c084fc; }
+
+  /* DRY RUN VISUALIZER */
+  .dry-run-step {
+    display: flex;
+    gap: 16px;
+    padding: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+    transition: all 0.3s;
+  }
+  .dry-run-step.highlight { border-color: var(--accent); background: rgba(0,255,136,0.05); }
+  .step-num {
+    background: var(--accent3);
+    color: white;
+    width: 28px; height: 28px;
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .step-content { flex: 1; }
+  .step-vars {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;
+  }
+  .var-box {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    border-radius: 2px;
+  }
+  .var-box .vname { color: var(--muted); }
+  .var-box .vval { color: var(--accent); font-weight: 700; }
+
+  /* CONSTRAINTS TABLE */
+  .constraint-table { width: 100%; border-collapse: collapse; }
+  .constraint-table th, .constraint-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .constraint-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    background: var(--surface2);
+  }
+  .constraint-table td:first-child { font-family: 'Space Mono', monospace; color: var(--accent4); font-size: 12px; }
+  .constraint-table td:nth-child(2) { color: var(--gold); font-weight: 500; }
+
+  /* APPROACH FLOW */
+  .approach-flow { display: flex; gap: 0; align-items: stretch; margin: 20px 0; flex-wrap: wrap; }
+  .approach-step {
+    flex: 1; min-width: 140px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 20px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .approach-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 18px;
+    z-index: 2;
+    background: var(--bg);
+    padding: 0 2px;
+  }
+  .approach-step .as-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .approach-step .as-title { font-size: 13px; font-weight: 600; }
+  .approach-step .as-complexity { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent2); margin-top: 4px; }
+
+  /* 60-DAY PLAN */
+  .week-block {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .week-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px;
+    background: var(--surface2);
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+  }
+  .week-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 32px;
+    color: var(--muted);
+    line-height: 1;
+    min-width: 50px;
+  }
+  .week-info h3 { font-size: 15px; font-weight: 600; }
+  .week-info p { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .week-badge { margin-left: auto; }
+  .day-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+  }
+  .day-item {
+    background: var(--surface);
+    padding: 14px 16px;
+  }
+  .day-item .day-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .day-item .day-topic { font-size: 13px; font-weight: 500; }
+  .day-item .day-count { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* INTERACTIVE QUIZ */
+  .quiz-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .quiz-question { font-size: 16px; font-weight: 500; margin-bottom: 16px; line-height: 1.5; }
+  .quiz-options { display: grid; gap: 10px; }
+  .quiz-option {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    text-align: left;
+    color: var(--text);
+    font-family: inherit;
+  }
+  .quiz-option:hover { border-color: var(--accent4); color: var(--accent4); }
+  .quiz-option.correct { border-color: var(--accent); background: rgba(0,255,136,0.08); color: var(--accent); }
+  .quiz-option.wrong { border-color: var(--accent2); background: rgba(255,107,53,0.08); color: var(--accent2); }
+
+  /* PROGRESS BAR */
+  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin: 8px 0; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent4)); border-radius: 2px; transition: width 0.5s; }
+
+  /* MEMORY MNEMONICS */
+  .mnemonic-card {
+    background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(14,165,233,0.05));
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 4px;
+    padding: 20px;
+    margin: 12px 0;
+  }
+  .mnemonic-card .mnemonic-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #c084fc;
+    margin-bottom: 8px;
+  }
+  .mnemonic-card .mnemonic-text { font-size: 18px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+  .mnemonic-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* CHEATSHEET */
+  .cheat-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cheat-key {
+    padding: 12px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent4);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+  }
+  .cheat-val {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ACCORDION */
+  .accordion-body { display: none; padding: 20px; }
+  .accordion-body.open { display: block; }
+
+  /* HIGHLIGHT */
+  .highlight-text { color: var(--accent); font-weight: 600; }
+  .highlight-orange { color: var(--accent2); font-weight: 600; }
+  .highlight-purple { color: #c084fc; font-weight: 600; }
+
+  p { line-height: 1.7; color: #b0b0c0; font-size: 14px; }
+  ul, ol { padding-left: 20px; }
+  li { font-size: 13px; color: #b0b0c0; line-height: 1.8; }
+  strong { color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin: 16px 0 8px; }
+
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    margin: 2px;
+  }
+  .pill.green { background: rgba(0,255,136,0.1); color: var(--accent); }
+  .pill.blue { background: rgba(14,165,233,0.1); color: var(--accent4); }
+  .pill.orange { background: rgba(255,107,53,0.1); color: var(--accent2); }
+  .pill.purple { background: rgba(124,58,237,0.15); color: #c084fc; }
+
+  .info-box {
+    background: rgba(14,165,233,0.05);
+    border-left: 3px solid var(--accent4);
+    padding: 14px 18px;
+    margin: 12px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: #b0b0c0;
+    line-height: 1.7;
+  }
+  .warn-box {
+    background: rgba(251,191,36,0.05);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    margin: 12px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: #b0b0c0;
+    line-height: 1.7;
+  }
+
+  .btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin: 4px;
+  }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="badge">60-DAY PLAN</div>
+      <h1>DSA <span>GOD</span><br>PLAN</h1>
+      <div class="hero-sub">// JAVA · 30+ PATTERNS · BIG TECH INTERVIEWS · NEVER FORGET</div>
+    </div>
+    <div style="text-align:right; padding-top:20px;">
+      <div style="font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:4px;">PATTERNS COVERED</div>
+      <div style="font-family:'Bebas Neue',cursive; font-size:64px; color:var(--accent); line-height:1;">33</div>
+      <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--muted);">JAVA · DRY-RUN · CONSTRAINTS</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showTab('patterns')">33 PATTERNS</button>
+  <button class="nav-tab" onclick="showTab('constraints')">CONSTRAINTS</button>
+  <button class="nav-tab" onclick="showTab('approach')">HOW TO APPROACH</button>
+  <button class="nav-tab" onclick="showTab('dryrun')">DRY RUN GUIDE</button>
+  <button class="nav-tab" onclick="showTab('plan60')">60-DAY PLAN</button>
+  <button class="nav-tab" onclick="showTab('memory')">MEMORY TRICKS</button>
+  <button class="nav-tab" onclick="showTab('quiz')">QUIZ YOURSELF</button>
+</div>
+
+<div class="main">
+
+<!-- ===== PATTERNS ===== -->
+<div id="tab-patterns" class="section active">
+  <div class="card green">
+    <div class="card-title">// THE COMPLETE ARSENAL</div>
+    <h2>33 Algorithm Patterns — Java</h2>
+    <p>Every Big Tech interview question maps to one of these patterns. Master these and no problem can surprise you.</p>
+  </div>
+
+  <div class="grid-2">
+
+  <!-- P1 -->
+  <div class="pattern-card">
+    <div class="pnum">01</div>
+    <h3>TWO POINTERS</h3>
+    <p>Two indices moving toward each other or in same direction. Use on sorted arrays to avoid O(n²) nested loops.</p>
+    <div class="mnemonic-card" style="margin-top:12px; padding:12px;">
+      <div class="mnemonic-title">MNEMONIC</div>
+      <div class="mnemonic-text" style="font-size:14px;">🏃‍♂️🏃‍♀️ "Two runners on a track"</div>
+      <p style="font-size:12px;">One from left, one from right. They meet in the middle.</p>
+    </div>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Two Sum II - sorted array</span>
+<span class="type">int</span> <span class="var">left</span> = <span class="num">0</span>, <span class="var">right</span> = nums.length - <span class="num">1</span>;
+<span class="kw">while</span> (<span class="var">left</span> &lt; <span class="var">right</span>) {
+  <span class="type">int</span> <span class="var">sum</span> = nums[<span class="var">left</span>] + nums[<span class="var">right</span>];
+  <span class="kw">if</span> (<span class="var">sum</span> == <span class="var">target</span>) <span class="kw">return</span>;
+  <span class="kw">else if</span> (<span class="var">sum</span> &lt; <span class="var">target</span>) <span class="var">left</span>++;
+  <span class="kw">else</span> <span class="var">right</span>--;
+}</div>
+    <div class="tags">
+      <span class="tag easy">EASY</span>
+      <span class="tag pattern">ARRAY</span>
+      <span class="tag pattern">STRING</span>
+    </div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Two Sum II, 3Sum, Container With Most Water, Valid Palindrome</div>
+  </div>
+
+  <!-- P2 -->
+  <div class="pattern-card">
+    <div class="pnum">02</div>
+    <h3>SLIDING WINDOW</h3>
+    <p>Maintain a window of elements. Expand right, shrink left when invalid. Avoid O(n²) subarray/substring checks.</p>
+    <div class="mnemonic-card" style="margin-top:12px; padding:12px;">
+      <div class="mnemonic-title">MNEMONIC</div>
+      <div class="mnemonic-text" style="font-size:14px;">🪟 "A moving window on a train"</div>
+      <p style="font-size:12px;">You slide the frame — what's outside doesn't matter.</p>
+    </div>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Longest substring without repeat</span>
+<span class="type">Map</span>&lt;<span class="type">Character</span>, <span class="type">Integer</span>&gt; <span class="var">map</span> = <span class="kw">new</span> <span class="fn">HashMap</span>();
+<span class="type">int</span> <span class="var">left</span> = <span class="num">0</span>, <span class="var">max</span> = <span class="num">0</span>;
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">r</span> = <span class="num">0</span>; <span class="var">r</span> &lt; s.length(); <span class="var">r</span>++) {
+  <span class="kw">if</span> (<span class="var">map</span>.<span class="fn">containsKey</span>(s.<span class="fn">charAt</span>(<span class="var">r</span>)))
+    <span class="var">left</span> = <span class="type">Math</span>.<span class="fn">max</span>(<span class="var">left</span>, <span class="var">map</span>.<span class="fn">get</span>(s.<span class="fn">charAt</span>(<span class="var">r</span>)) + <span class="num">1</span>);
+  <span class="var">map</span>.<span class="fn">put</span>(s.<span class="fn">charAt</span>(<span class="var">r</span>), <span class="var">r</span>);
+  <span class="var">max</span> = <span class="type">Math</span>.<span class="fn">max</span>(<span class="var">max</span>, <span class="var">r</span> - <span class="var">left</span> + <span class="num">1</span>);
+}</div>
+    <div class="tags">
+      <span class="tag medium">MEDIUM</span>
+      <span class="tag pattern">STRING</span>
+      <span class="tag pattern">ARRAY</span>
+    </div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Longest Substring, Minimum Window Substring, Permutation in String</div>
+  </div>
+
+  <!-- P3 -->
+  <div class="pattern-card">
+    <div class="pnum">03</div>
+    <h3>FAST & SLOW POINTERS</h3>
+    <p>Floyd's cycle detection. Slow moves 1 step, fast moves 2. They meet inside a cycle. Perfect for linked list cycles.</p>
+    <div class="mnemonic-card" style="margin-top:12px; padding:12px;">
+      <div class="mnemonic-title">MNEMONIC</div>
+      <div class="mnemonic-text" style="font-size:14px;">🐢🐇 "Tortoise & Hare"</div>
+      <p style="font-size:12px;">If there's a loop, the hare laps the tortoise.</p>
+    </div>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Detect cycle in linked list</span>
+<span class="type">ListNode</span> <span class="var">slow</span> = <span class="var">head</span>, <span class="var">fast</span> = <span class="var">head</span>;
+<span class="kw">while</span> (<span class="var">fast</span> != <span class="kw">null</span> &amp;&amp; <span class="var">fast</span>.next != <span class="kw">null</span>) {
+  <span class="var">slow</span> = <span class="var">slow</span>.next;
+  <span class="var">fast</span> = <span class="var">fast</span>.next.next;
+  <span class="kw">if</span> (<span class="var">slow</span> == <span class="var">fast</span>) <span class="kw">return true</span>; <span class="cmt">// cycle!</span>
+}</div>
+    <div class="tags"><span class="tag easy">EASY</span><span class="tag pattern">LINKED LIST</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Linked List Cycle, Happy Number, Find Duplicate Number, Middle of LL</div>
+  </div>
+
+  <!-- P4 -->
+  <div class="pattern-card">
+    <div class="pnum">04</div>
+    <h3>MERGE INTERVALS</h3>
+    <p>Sort by start time, then merge overlapping intervals. Key insight: if cur.start ≤ prev.end → overlap.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="type">Arrays</span>.<span class="fn">sort</span>(<span class="var">intervals</span>, (a,b) -> a[<span class="num">0</span>] - b[<span class="num">0</span>]);
+<span class="type">List</span>&lt;<span class="type">int[]</span>&gt; <span class="var">res</span> = <span class="kw">new</span> <span class="fn">ArrayList</span>();
+<span class="kw">for</span> (<span class="type">int[]</span> <span class="var">i</span> : <span class="var">intervals</span>) {
+  <span class="kw">if</span> (<span class="var">res</span>.<span class="fn">isEmpty</span>() || <span class="var">res</span>.<span class="fn">get</span>(<span class="var">res</span>.size()-<span class="num">1</span>)[<span class="num">1</span>] &lt; <span class="var">i</span>[<span class="num">0</span>])
+    <span class="var">res</span>.<span class="fn">add</span>(<span class="var">i</span>);
+  <span class="kw">else</span>
+    <span class="var">res</span>.<span class="fn">get</span>(<span class="var">res</span>.size()-<span class="num">1</span>)[<span class="num">1</span>] = <span class="type">Math</span>.<span class="fn">max</span>(...[<span class="num">1</span>], <span class="var">i</span>[<span class="num">1</span>]);
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">SORTING</span><span class="tag pattern">ARRAY</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Merge Intervals, Insert Interval, Meeting Rooms, Non-overlapping</div>
+  </div>
+
+  <!-- P5 -->
+  <div class="pattern-card">
+    <div class="pnum">05</div>
+    <h3>BINARY SEARCH</h3>
+    <p>Not just sorted arrays! Think: "Can I binary search on the answer?" Search space must be monotonic.</p>
+    <div class="mnemonic-card" style="margin-top:12px; padding:12px;">
+      <div class="mnemonic-title">TEMPLATE — Never get it wrong</div>
+      <div class="code-block" style="font-size:11px; margin:6px 0 0;">
+<span class="type">int</span> <span class="var">lo</span>=<span class="num">0</span>, <span class="var">hi</span>=n-<span class="num">1</span>;
+<span class="kw">while</span> (<span class="var">lo</span> &lt;= <span class="var">hi</span>) {  <span class="cmt">// &lt;= for exact match</span>
+  <span class="type">int</span> <span class="var">mid</span> = <span class="var">lo</span> + (<span class="var">hi</span>-<span class="var">lo</span>)/<span class="num">2</span>; <span class="cmt">// avoids overflow!</span>
+  <span class="kw">if</span> (<span class="fn">check</span>(<span class="var">mid</span>)) <span class="kw">return</span> <span class="var">mid</span>;
+  <span class="kw">else if</span> (<span class="fn">tooSmall</span>(<span class="var">mid</span>)) <span class="var">lo</span> = <span class="var">mid</span>+<span class="num">1</span>;
+  <span class="kw">else</span> <span class="var">hi</span> = <span class="var">mid</span>-<span class="num">1</span>;
+}</div>
+    </div>
+    <div class="tags"><span class="tag easy">EASY→HARD</span><span class="tag pattern">SEARCH</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Search Rotated, Koko Bananas, Median of Arrays, Capacity To Ship</div>
+  </div>
+
+  <!-- P6 -->
+  <div class="pattern-card">
+    <div class="pnum">06</div>
+    <h3>BFS (Level Order)</h3>
+    <p>Queue-based. Explore level by level. Use for shortest path, minimum steps, level-order traversal.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="type">Queue</span>&lt;<span class="type">TreeNode</span>&gt; <span class="var">q</span> = <span class="kw">new</span> <span class="fn">LinkedList</span>();
+<span class="var">q</span>.<span class="fn">offer</span>(<span class="var">root</span>);
+<span class="kw">while</span> (!<span class="var">q</span>.<span class="fn">isEmpty</span>()) {
+  <span class="type">int</span> <span class="var">size</span> = <span class="var">q</span>.<span class="fn">size</span>(); <span class="cmt">// lock in level size!</span>
+  <span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="num">0</span>; <span class="var">i</span>&lt;<span class="var">size</span>; <span class="var">i</span>++) {
+    <span class="type">TreeNode</span> <span class="var">node</span> = <span class="var">q</span>.<span class="fn">poll</span>();
+    <span class="cmt">// process node</span>
+    <span class="kw">if</span> (<span class="var">node</span>.left != <span class="kw">null</span>) <span class="var">q</span>.<span class="fn">offer</span>(<span class="var">node</span>.left);
+    <span class="kw">if</span> (<span class="var">node</span>.right != <span class="kw">null</span>) <span class="var">q</span>.<span class="fn">offer</span>(<span class="var">node</span>.right);
+  }
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">TREE</span><span class="tag pattern">GRAPH</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Level Order, Binary Tree ZigZag, Rotting Oranges, Word Ladder</div>
+  </div>
+
+  <!-- P7 -->
+  <div class="pattern-card">
+    <div class="pnum">07</div>
+    <h3>DFS (Backtracking)</h3>
+    <p>Explore all paths. Make a choice → recurse → undo choice. Classic: permutations, subsets, combinations.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="kw">void</span> <span class="fn">backtrack</span>(<span class="type">List</span> <span class="var">res</span>, <span class="type">List</span> <span class="var">curr</span>, ...) {
+  <span class="kw">if</span> (baseCase) { <span class="var">res</span>.<span class="fn">add</span>(<span class="kw">new</span> <span class="fn">ArrayList</span>(<span class="var">curr</span>)); <span class="kw">return</span>; }
+  <span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="var">start</span>; <span class="var">i</span>&lt;<span class="var">candidates</span>.length; <span class="var">i</span>++) {
+    <span class="var">curr</span>.<span class="fn">add</span>(<span class="var">candidates</span>[<span class="var">i</span>]);    <span class="cmt">// choose</span>
+    <span class="fn">backtrack</span>(<span class="var">res</span>, <span class="var">curr</span>, <span class="var">i</span>+<span class="num">1</span>); <span class="cmt">// explore</span>
+    <span class="var">curr</span>.<span class="fn">remove</span>(<span class="var">curr</span>.size()-<span class="num">1</span>); <span class="cmt">// undo</span>
+  }
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">RECURSION</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Subsets, Permutations, Combination Sum, N-Queens, Word Search</div>
+  </div>
+
+  <!-- P8 -->
+  <div class="pattern-card">
+    <div class="pnum">08</div>
+    <h3>DYNAMIC PROGRAMMING — 1D</h3>
+    <p>Break problem into subproblems. dp[i] = answer for first i elements. Fill bottom-up.</p>
+    <div class="mnemonic-card" style="margin-top:12px; padding:12px;">
+      <div class="mnemonic-title">KEY QUESTION TO ASK</div>
+      <div class="mnemonic-text" style="font-size:13px;">"What is dp[i] in terms of dp[i-1]?"</div>
+    </div>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Climbing stairs: dp[i] = dp[i-1] + dp[i-2]</span>
+<span class="type">int</span>[] <span class="var">dp</span> = <span class="kw">new</span> <span class="type">int</span>[n+<span class="num">1</span>];
+<span class="var">dp</span>[<span class="num">0</span>] = <span class="num">1</span>; <span class="var">dp</span>[<span class="num">1</span>] = <span class="num">1</span>;
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="num">2</span>; <span class="var">i</span>&lt;=n; <span class="var">i</span>++)
+  <span class="var">dp</span>[<span class="var">i</span>] = <span class="var">dp</span>[<span class="var">i</span>-<span class="num">1</span>] + <span class="var">dp</span>[<span class="var">i</span>-<span class="num">2</span>];</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">DP</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: House Robber, Climbing Stairs, Decode Ways, Jump Game</div>
+  </div>
+
+  <!-- P9 -->
+  <div class="pattern-card">
+    <div class="pnum">09</div>
+    <h3>DYNAMIC PROGRAMMING — 2D</h3>
+    <p>dp[i][j] = answer for subproblem of size i×j. Knapsack, LCS, edit distance all use this.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Longest Common Subsequence</span>
+<span class="type">int</span>[][] <span class="var">dp</span> = <span class="kw">new</span> <span class="type">int</span>[m+<span class="num">1</span>][n+<span class="num">1</span>];
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="num">1</span>; <span class="var">i</span>&lt;=m; <span class="var">i</span>++) {
+  <span class="kw">for</span> (<span class="type">int</span> <span class="var">j</span>=<span class="num">1</span>; <span class="var">j</span>&lt;=n; <span class="var">j</span>++) {
+    <span class="kw">if</span> (text1.<span class="fn">charAt</span>(<span class="var">i</span>-<span class="num">1</span>)==text2.<span class="fn">charAt</span>(<span class="var">j</span>-<span class="num">1</span>))
+      <span class="var">dp</span>[<span class="var">i</span>][<span class="var">j</span>] = <span class="var">dp</span>[<span class="var">i</span>-<span class="num">1</span>][<span class="var">j</span>-<span class="num">1</span>] + <span class="num">1</span>;
+    <span class="kw">else</span>
+      <span class="var">dp</span>[<span class="var">i</span>][<span class="var">j</span>] = <span class="type">Math</span>.<span class="fn">max</span>(<span class="var">dp</span>[<span class="var">i</span>-<span class="num">1</span>][<span class="var">j</span>], <span class="var">dp</span>[<span class="var">i</span>][<span class="var">j</span>-<span class="num">1</span>]);
+  }
+}</div>
+    <div class="tags"><span class="tag hard">HARD</span><span class="tag pattern">DP</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: LCS, Edit Distance, Unique Paths, Coin Change II, Knapsack</div>
+  </div>
+
+  <!-- P10 -->
+  <div class="pattern-card">
+    <div class="pnum">10</div>
+    <h3>UNION-FIND (Disjoint Set)</h3>
+    <p>Track connected components. union() merges sets, find() finds root. Path compression + union by rank = nearly O(1).</p>
+    <div class="mnemonic-card" style="margin-top:12px; padding:12px;">
+      <div class="mnemonic-title">MNEMONIC</div>
+      <div class="mnemonic-text" style="font-size:14px;">🌳 "Family tree with a boss"</div>
+      <p style="font-size:12px;">Everyone reports to one boss (root). Merging = merging families.</p>
+    </div>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="kw">class</span> <span class="type">UnionFind</span> {
+  <span class="type">int</span>[] <span class="var">parent</span>, <span class="var">rank</span>;
+  <span class="fn">UnionFind</span>(<span class="type">int</span> <span class="var">n</span>) {
+    <span class="var">parent</span> = <span class="type">IntStream</span>.<span class="fn">range</span>(<span class="num">0</span>,n).<span class="fn">toArray</span>();
+    <span class="var">rank</span> = <span class="kw">new</span> <span class="type">int</span>[n];
+  }
+  <span class="type">int</span> <span class="fn">find</span>(<span class="type">int</span> <span class="var">x</span>) { <span class="cmt">// path compression</span>
+    <span class="kw">if</span> (<span class="var">parent</span>[<span class="var">x</span>] != <span class="var">x</span>) <span class="var">parent</span>[<span class="var">x</span>] = <span class="fn">find</span>(<span class="var">parent</span>[<span class="var">x</span>]);
+    <span class="kw">return</span> <span class="var">parent</span>[<span class="var">x</span>];
+  }
+  <span class="kw">void</span> <span class="fn">union</span>(<span class="type">int</span> <span class="var">a</span>, <span class="type">int</span> <span class="var">b</span>) {
+    <span class="type">int</span> <span class="var">ra</span>=<span class="fn">find</span>(<span class="var">a</span>), <span class="var">rb</span>=<span class="fn">find</span>(<span class="var">b</span>);
+    <span class="kw">if</span> (<span class="var">rank</span>[<span class="var">ra</span>]&gt;<span class="var">rank</span>[<span class="var">rb</span>]) <span class="var">parent</span>[<span class="var">rb</span>]=<span class="var">ra</span>;
+    <span class="kw">else if</span> (<span class="var">rank</span>[<span class="var">ra</span>]&lt;<span class="var">rank</span>[<span class="var">rb</span>]) <span class="var">parent</span>[<span class="var">ra</span>]=<span class="var">rb</span>;
+    <span class="kw">else</span> { <span class="var">parent</span>[<span class="var">rb</span>]=<span class="var">ra</span>; <span class="var">rank</span>[<span class="var">ra</span>]++; }
+  }
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">GRAPH</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Number of Islands, Accounts Merge, Redundant Connection</div>
+  </div>
+
+  <!-- P11 -->
+  <div class="pattern-card">
+    <div class="pnum">11</div>
+    <h3>HEAP / PRIORITY QUEUE</h3>
+    <p>Use when you need to repeatedly get min/max. Top K elements, K-th largest, merge K sorted lists.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Top K frequent elements</span>
+<span class="type">PriorityQueue</span>&lt;<span class="type">int[]</span>&gt; <span class="var">minHeap</span> =
+  <span class="kw">new</span> <span class="fn">PriorityQueue</span>((a,b) -> a[<span class="num">1</span>]-b[<span class="num">1</span>]);
+<span class="kw">for</span> (<span class="kw">var</span> <span class="var">e</span> : <span class="var">freq</span>.<span class="fn">entrySet</span>()) {
+  <span class="var">minHeap</span>.<span class="fn">offer</span>(<span class="kw">new</span> <span class="type">int</span>[]{<span class="var">e</span>.<span class="fn">getKey</span>(), <span class="var">e</span>.<span class="fn">getValue</span>()});
+  <span class="kw">if</span> (<span class="var">minHeap</span>.<span class="fn">size</span>() > k) <span class="var">minHeap</span>.<span class="fn">poll</span>();
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">HEAP</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Kth Largest, Top K Frequent, Merge K Sorted Lists, Find Median</div>
+  </div>
+
+  <!-- P12 -->
+  <div class="pattern-card">
+    <div class="pnum">12</div>
+    <h3>MONOTONIC STACK</h3>
+    <p>Stack that stays sorted. Pop when current element breaks monotonicity. Classic: next greater element, histogram.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Next Greater Element</span>
+<span class="type">Stack</span>&lt;<span class="type">Integer</span>&gt; <span class="var">stack</span> = <span class="kw">new</span> <span class="fn">Stack</span>();
+<span class="type">int</span>[] <span class="var">res</span> = <span class="kw">new</span> <span class="type">int</span>[n];
+<span class="type">Arrays</span>.<span class="fn">fill</span>(<span class="var">res</span>, -<span class="num">1</span>);
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="num">0</span>; <span class="var">i</span>&lt;n; <span class="var">i</span>++) {
+  <span class="kw">while</span> (!<span class="var">stack</span>.<span class="fn">isEmpty</span>() &amp;&amp; nums[<span class="var">stack</span>.<span class="fn">peek</span>()] &lt; nums[<span class="var">i</span>])
+    <span class="var">res</span>[<span class="var">stack</span>.<span class="fn">pop</span>()] = nums[<span class="var">i</span>]; <span class="cmt">// found NGE!</span>
+  <span class="var">stack</span>.<span class="fn">push</span>(<span class="var">i</span>);
+}</div>
+    <div class="tags"><span class="tag hard">HARD</span><span class="tag pattern">STACK</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Next Greater Element, Largest Rectangle Histogram, Daily Temperatures</div>
+  </div>
+
+  <!-- P13-P33: Remaining patterns condensed -->
+  <div class="pattern-card">
+    <div class="pnum">13</div>
+    <h3>PREFIX SUM</h3>
+    <p>Pre-compute cumulative sums. Range sum query in O(1). prefix[i] = prefix[i-1] + nums[i-1].</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Subarray sum = prefix[r+1] - prefix[l]</span>
+<span class="type">int</span>[] <span class="var">prefix</span> = <span class="kw">new</span> <span class="type">int</span>[n+<span class="num">1</span>];
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="num">0</span>; <span class="var">i</span>&lt;n; <span class="var">i</span>++)
+  <span class="var">prefix</span>[<span class="var">i</span>+<span class="num">1</span>] = <span class="var">prefix</span>[<span class="var">i</span>] + nums[<span class="var">i</span>];</div>
+    <div class="tags"><span class="tag easy">EASY</span><span class="tag pattern">ARRAY</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Subarray Sum Equals K, Range Sum Query, Product Except Self</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">14</div>
+    <h3>HASH MAP / SET</h3>
+    <p>Trade space for time. O(1) lookup. Count frequencies, detect duplicates, store visited states.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Two Sum: complement lookup</span>
+<span class="type">Map</span>&lt;<span class="type">Integer</span>,<span class="type">Integer</span>&gt; <span class="var">seen</span> = <span class="kw">new</span> <span class="fn">HashMap</span>();
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="num">0</span>; <span class="var">i</span>&lt;nums.length; <span class="var">i</span>++) {
+  <span class="type">int</span> <span class="var">comp</span> = <span class="var">target</span> - nums[<span class="var">i</span>];
+  <span class="kw">if</span> (<span class="var">seen</span>.<span class="fn">containsKey</span>(<span class="var">comp</span>)) <span class="kw">return</span> ...;
+  <span class="var">seen</span>.<span class="fn">put</span>(nums[<span class="var">i</span>], <span class="var">i</span>);
+}</div>
+    <div class="tags"><span class="tag easy">EASY</span><span class="tag pattern">HASH</span></div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">15</div>
+    <h3>TREE DFS (Recursive)</h3>
+    <p>Preorder/inorder/postorder. Pass extra state (min/max for BST validation, path sum, depth).</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Max depth — classic DFS</span>
+<span class="type">int</span> <span class="fn">maxDepth</span>(<span class="type">TreeNode</span> <span class="var">root</span>) {
+  <span class="kw">if</span> (<span class="var">root</span> == <span class="kw">null</span>) <span class="kw">return</span> <span class="num">0</span>;
+  <span class="kw">return</span> <span class="num">1</span> + <span class="type">Math</span>.<span class="fn">max</span>(
+    <span class="fn">maxDepth</span>(<span class="var">root</span>.left),
+    <span class="fn">maxDepth</span>(<span class="var">root</span>.right));
+}</div>
+    <div class="tags"><span class="tag easy">EASY</span><span class="tag pattern">TREE</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Max Depth, Path Sum, Validate BST, Diameter, LCA</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">16</div>
+    <h3>TOPOLOGICAL SORT (Kahn's)</h3>
+    <p>Process nodes with in-degree 0 first. Use for dependency ordering, cycle detection in directed graphs.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Course Schedule</span>
+<span class="type">int</span>[] <span class="var">inDeg</span> = <span class="kw">new</span> <span class="type">int</span>[n];
+<span class="type">Queue</span>&lt;<span class="type">Integer</span>&gt; <span class="var">q</span> = <span class="kw">new</span> <span class="fn">LinkedList</span>();
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="num">0</span>; <span class="var">i</span>&lt;n; <span class="var">i</span>++)
+  <span class="kw">if</span> (<span class="var">inDeg</span>[<span class="var">i</span>]==<span class="num">0</span>) <span class="var">q</span>.<span class="fn">offer</span>(<span class="var">i</span>);
+<span class="kw">while</span> (!<span class="var">q</span>.<span class="fn">isEmpty</span>()) {
+  <span class="type">int</span> <span class="var">u</span>=<span class="var">q</span>.<span class="fn">poll</span>(); <span class="var">count</span>++;
+  <span class="kw">for</span> (<span class="type">int</span> <span class="var">v</span> : <span class="var">adj</span>.<span class="fn">get</span>(<span class="var">u</span>))
+    <span class="kw">if</span> (--<span class="var">inDeg</span>[<span class="var">v</span>]==<span class="num">0</span>) <span class="var">q</span>.<span class="fn">offer</span>(<span class="var">v</span>);
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">GRAPH</span><span class="tag pattern">DAG</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Course Schedule, Alien Dictionary, Task Scheduler</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">17</div>
+    <h3>TRIE (Prefix Tree)</h3>
+    <p>Tree of characters. Each path = a word. O(L) insert/search where L = word length. Great for autocomplete, prefix search.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="kw">class</span> <span class="type">TrieNode</span> {
+  <span class="type">TrieNode</span>[] <span class="var">children</span> = <span class="kw">new</span> <span class="type">TrieNode</span>[<span class="num">26</span>];
+  <span class="type">boolean</span> <span class="var">isEnd</span>;
+}
+<span class="cmt">// Insert: for each char → children[c-'a']</span></div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">STRING</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Implement Trie, Word Search II, Add and Search Word</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">18</div>
+    <h3>SEGMENT TREE</h3>
+    <p>Range queries + updates in O(log n). Build once in O(n), then query/update efficiently. Use for range min/max/sum.</p>
+    <div class="tags"><span class="tag hard">HARD</span><span class="tag pattern">TREE</span><span class="tag pattern">RANGE</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Range Sum Query (Mutable), Count Smaller After Self</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">19</div>
+    <h3>GREEDY</h3>
+    <p>Make the locally optimal choice at each step. Proof: "If we don't pick the greedy choice, we can swap without loss."</p>
+    <div class="mnemonic-card" style="margin-top:12px; padding:12px;">
+      <div class="mnemonic-title">KEY QUESTION</div>
+      <div class="mnemonic-text" style="font-size:13px;">"Is the greedy choice always safe?"</div>
+      <p style="font-size:12px;">Sort first — greedy usually needs a sorted order.</p>
+    </div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">OPTIMIZATION</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Jump Game, Gas Station, Meeting Rooms, Task Scheduler</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">20</div>
+    <h3>DIVIDE & CONQUER</h3>
+    <p>Split into halves → solve each → merge. Base case is trivial. T(n) = 2T(n/2) + O(n) → O(n log n).</p>
+    <div class="tags"><span class="tag hard">HARD</span><span class="tag pattern">RECURSION</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Merge Sort, Quick Sort, Count Inversions, Median of Medians</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">21</div>
+    <h3>CYCLIC SORT</h3>
+    <p>For arrays with numbers in range [1..n]. Place each number at its correct index. O(n) time.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="type">int</span> <span class="var">i</span>=<span class="num">0</span>;
+<span class="kw">while</span> (<span class="var">i</span>&lt;nums.length) {
+  <span class="type">int</span> <span class="var">j</span> = nums[<span class="var">i</span>]-<span class="num">1</span>;
+  <span class="kw">if</span> (nums[<span class="var">i</span>] != nums[<span class="var">j</span>]) <span class="fn">swap</span>(<span class="var">nums</span>, <span class="var">i</span>, <span class="var">j</span>);
+  <span class="kw">else</span> <span class="var">i</span>++;
+}</div>
+    <div class="tags"><span class="tag easy">EASY</span><span class="tag pattern">ARRAY</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Missing Number, Find Duplicate, Find All Missing Numbers</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">22</div>
+    <h3>BIT MANIPULATION</h3>
+    <p>XOR, AND, OR, shifts. XOR of same = 0. Use for finding unique element, subsets, power of 2 check.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// Single Number (XOR trick)</span>
+<span class="type">int</span> <span class="var">res</span>=<span class="num">0</span>;
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">n</span>: nums) <span class="var">res</span> ^= <span class="var">n</span>;
+<span class="cmt">// Hamming weight</span>
+<span class="kw">while</span>(n!=<span class="num">0</span>){count+=n&amp;<span class="num">1</span>; n&gt;&gt;&gt;=<span class="num">1</span>;}</div>
+    <div class="tags"><span class="tag easy">EASY</span><span class="tag pattern">MATH</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Single Number, Subsets via Bits, Counting Bits, Reverse Bits</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">23</div>
+    <h3>GRAPH — DIJKSTRA</h3>
+    <p>Shortest path with weighted edges. Use min-heap. Never revisit a settled node.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="type">PriorityQueue</span>&lt;<span class="type">int[]</span>&gt; <span class="var">pq</span> = <span class="kw">new</span> <span class="fn">PriorityQueue</span>((a,b)->a[<span class="num">1</span>]-b[<span class="num">1</span>]);
+<span class="var">pq</span>.<span class="fn">offer</span>(<span class="kw">new</span> <span class="type">int</span>[]{src, <span class="num">0</span>});
+<span class="kw">while</span>(!<span class="var">pq</span>.<span class="fn">isEmpty</span>()) {
+  <span class="type">int</span>[] <span class="var">curr</span>=<span class="var">pq</span>.<span class="fn">poll</span>();
+  <span class="kw">if</span>(<span class="var">visited</span>[<span class="var">curr</span>[<span class="num">0</span>]]) <span class="kw">continue</span>;
+  <span class="cmt">// relax neighbors...</span>
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">GRAPH</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Network Delay Time, Path with Min Effort, Cheapest Flights</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">24</div>
+    <h3>ISLAND / FLOOD FILL (DFS/BFS on Grid)</h3>
+    <p>4-directional or 8-directional grid traversal. Mark visited by modifying grid or using boolean array.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="type">int</span>[][] <span class="var">dirs</span> = {{<span class="num">0</span>,<span class="num">1</span>},{<span class="num">1</span>,<span class="num">0</span>},{<span class="num">0</span>,-<span class="num">1</span>},{-<span class="num">1</span>,<span class="num">0</span>}};
+<span class="kw">void</span> <span class="fn">dfs</span>(<span class="type">int</span>[][] <span class="var">g</span>, <span class="type">int</span> <span class="var">r</span>, <span class="type">int</span> <span class="var">c</span>) {
+  <span class="kw">if</span> (r&lt;<span class="num">0</span>||r&gt;=<span class="var">g</span>.length||c&lt;<span class="num">0</span>||c&gt;=<span class="var">g</span>[<span class="num">0</span>].length||<span class="var">g</span>[<span class="var">r</span>][<span class="var">c</span>]!=<span class="num">1</span>) <span class="kw">return</span>;
+  <span class="var">g</span>[<span class="var">r</span>][<span class="var">c</span>]=<span class="num">0</span>; <span class="cmt">// mark visited</span>
+  <span class="kw">for</span>(<span class="type">int</span>[] <span class="var">d</span>:<span class="var">dirs</span>) <span class="fn">dfs</span>(<span class="var">g</span>,<span class="var">r</span>+<span class="var">d</span>[<span class="num">0</span>],<span class="var">c</span>+<span class="var">d</span>[<span class="num">1</span>]);
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">GRAPH</span><span class="tag pattern">GRID</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Number of Islands, Max Area Island, Pacific Atlantic, Surrounded Regions</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">25</div>
+    <h3>MULTI-SOURCE BFS</h3>
+    <p>Start BFS from multiple sources simultaneously. Distance from nearest source computed in one pass.</p>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">BFS</span><span class="tag pattern">GRID</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Rotting Oranges, 01 Matrix, Walls and Gates</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">26</div>
+    <h3>MODIFIED BINARY SEARCH</h3>
+    <p>Binary search on rotated arrays, infinite arrays, or "search on answer" problems.</p>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">BINARY SEARCH</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Search in Rotated, Find Minimum in Rotated, Peak Element</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">27</div>
+    <h3>TREE DIAMETER / PATH SUM</h3>
+    <p>Compute answer through a node. At each node, combine left and right results. Global max updated at each node.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="type">int</span> <span class="var">maxDiam</span> = <span class="num">0</span>;
+<span class="type">int</span> <span class="fn">dfs</span>(<span class="type">TreeNode</span> <span class="var">node</span>) {
+  <span class="kw">if</span>(<span class="var">node</span>==<span class="kw">null</span>) <span class="kw">return</span> <span class="num">0</span>;
+  <span class="type">int</span> <span class="var">l</span>=<span class="fn">dfs</span>(<span class="var">node</span>.left), <span class="var">r</span>=<span class="fn">dfs</span>(<span class="var">node</span>.right);
+  <span class="var">maxDiam</span> = <span class="type">Math</span>.<span class="fn">max</span>(<span class="var">maxDiam</span>, <span class="var">l</span>+<span class="var">r</span>); <span class="cmt">// path thru node</span>
+  <span class="kw">return</span> <span class="num">1</span>+<span class="type">Math</span>.<span class="fn">max</span>(<span class="var">l</span>,<span class="var">r</span>); <span class="cmt">// height returned up</span>
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">TREE</span></div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">28</div>
+    <h3>MATRIX — DP (Grid)</h3>
+    <p>dp[i][j] depends on dp[i-1][j] and dp[i][j-1]. Classic: unique paths, minimum path sum.</p>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">DP</span><span class="tag pattern">GRID</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Unique Paths, Min Path Sum, Longest Increasing Path, Maximal Square</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">29</div>
+    <h3>STRING — PALINDROME EXPANSION</h3>
+    <p>Expand from center for O(n²). Use Manacher's for O(n). Check both odd and even center expansions.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="kw">for</span>(<span class="type">int</span> <span class="var">i</span>=<span class="num">0</span>; <span class="var">i</span>&lt;n; <span class="var">i</span>++) {
+  <span class="fn">expand</span>(<span class="var">s</span>, <span class="var">i</span>, <span class="var">i</span>);   <span class="cmt">// odd length</span>
+  <span class="fn">expand</span>(<span class="var">s</span>, <span class="var">i</span>, <span class="var">i</span>+<span class="num">1</span>); <span class="cmt">// even length</span>
+}</div>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">STRING</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Longest Palindromic Substring, Palindromic Substrings, Palindrome Partitioning</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">30</div>
+    <h3>LINKED LIST REVERSAL</h3>
+    <p>Reverse in-place with prev/curr/next pointers. Can reverse in groups of K.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="type">ListNode</span> <span class="var">prev</span>=<span class="kw">null</span>, <span class="var">curr</span>=<span class="var">head</span>;
+<span class="kw">while</span>(<span class="var">curr</span>!=<span class="kw">null</span>) {
+  <span class="type">ListNode</span> <span class="var">next</span>=<span class="var">curr</span>.next;
+  <span class="var">curr</span>.next=<span class="var">prev</span>;
+  <span class="var">prev</span>=<span class="var">curr</span>; <span class="var">curr</span>=<span class="var">next</span>;
+}
+<span class="kw">return</span> <span class="var">prev</span>;</div>
+    <div class="tags"><span class="tag easy">EASY</span><span class="tag pattern">LINKED LIST</span></div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">31</div>
+    <h3>KNAPSACK DP</h3>
+    <p>0/1 Knapsack: each item used once. Unbounded: items reused. dp[i][w] = max value with i items, weight w.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="cmt">// 0/1 Knapsack — iterate backwards!</span>
+<span class="kw">for</span>(<span class="type">int</span> <span class="var">w</span>=W; <span class="var">w</span>&gt;=wt[<span class="var">i</span>]; <span class="var">w</span>--)
+  <span class="var">dp</span>[<span class="var">w</span>]=<span class="type">Math</span>.<span class="fn">max</span>(<span class="var">dp</span>[<span class="var">w</span>], <span class="var">dp</span>[<span class="var">w</span>-wt[<span class="var">i</span>]]+val[<span class="var">i</span>]);
+<span class="cmt">// Unbounded — iterate forwards!</span>
+<span class="kw">for</span>(<span class="type">int</span> <span class="var">w</span>=wt[<span class="var">i</span>]; <span class="var">w</span>&lt;=W; <span class="var">w</span>++)
+  <span class="var">dp</span>[<span class="var">w</span>]=<span class="type">Math</span>.<span class="fn">max</span>(<span class="var">dp</span>[<span class="var">w</span>], <span class="var">dp</span>[<span class="var">w</span>-wt[<span class="var">i</span>]]+val[<span class="var">i</span>]);</div>
+    <div class="tags"><span class="tag hard">HARD</span><span class="tag pattern">DP</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Coin Change, Partition Equal Subset, Target Sum, Coin Change II</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">32</div>
+    <h3>INTERVAL SCHEDULING</h3>
+    <p>Sort by end time. Greedy: always pick the interval that ends earliest. Maximizes count of non-overlapping intervals.</p>
+    <div class="tags"><span class="tag medium">MEDIUM</span><span class="tag pattern">GREEDY</span><span class="tag pattern">INTERVAL</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Non-overlapping Intervals, Meeting Rooms II, Minimum Arrow Shots</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pnum">33</div>
+    <h3>BOYER-MOORE VOTING</h3>
+    <p>Find majority element in O(n) time O(1) space. Count up for candidate, down for others. If count=0, switch candidate.</p>
+    <div class="code-block" style="font-size:11px; margin-top:10px;">
+<span class="type">int</span> <span class="var">candidate</span>=<span class="num">0</span>, <span class="var">count</span>=<span class="num">0</span>;
+<span class="kw">for</span>(<span class="type">int</span> <span class="var">n</span>:nums) {
+  <span class="kw">if</span>(<span class="var">count</span>==<span class="num">0</span>) <span class="var">candidate</span>=<span class="var">n</span>;
+  <span class="var">count</span> += (<span class="var">n</span>==<span class="var">candidate</span>) ? <span class="num">1</span> : -<span class="num">1</span>;
+}</div>
+    <div class="tags"><span class="tag easy">EASY</span><span class="tag pattern">VOTING</span></div>
+    <div style="margin-top:10px; font-size:12px; color:var(--muted);">Problems: Majority Element, Majority Element II</div>
+  </div>
+
+  </div><!-- end grid-2 -->
+</div>
+
+<!-- ===== CONSTRAINTS ===== -->
+<div id="tab-constraints" class="section">
+  <div class="card blue">
+    <div class="card-title">// READ THE CONSTRAINTS FIRST</div>
+    <h2>Constraints → Algorithm Decoder</h2>
+    <p>Constraints are the interviewer's hint. Before writing a single line of code, read the constraints and decode the intended solution. This is the #1 skill separating senior engineers from juniors at Big Tech.</p>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">// THE CONSTRAINT CHEAT SHEET</div>
+    <h2>n constraints → Target complexity</h2>
+    <table class="constraint-table">
+      <tr><th>CONSTRAINT</th><th>TARGET COMPLEXITY</th><th>WHY / PATTERNS</th></tr>
+      <tr><td>n ≤ 10</td><td>O(n!) or O(2ⁿ)</td><td>Brute force all permutations/subsets. Backtracking OK.</td></tr>
+      <tr><td>n ≤ 20</td><td>O(2ⁿ) or O(2ⁿ·n)</td><td>Bitmask DP, backtracking. TSP-type problems.</td></tr>
+      <tr><td>n ≤ 100</td><td>O(n³)</td><td>3 nested loops OK. Floyd-Warshall. Matrix multiplication.</td></tr>
+      <tr><td>n ≤ 1,000</td><td>O(n²)</td><td>2 nested loops. DP with O(n²) states. Bubble sort is fine.</td></tr>
+      <tr><td>n ≤ 10,000</td><td>O(n² log n)</td><td>Tighter. Consider O(n log n) solutions.</td></tr>
+      <tr><td>n ≤ 100,000</td><td>O(n log n)</td><td>Sorting, heap, segment tree, BFS/DFS. NO O(n²)!</td></tr>
+      <tr><td>n ≤ 1,000,000</td><td>O(n) or O(n log n)</td><td>Linear scan, hash map, two pointers, sliding window.</td></tr>
+      <tr><td>n ≤ 10⁹</td><td>O(log n)</td><td>Binary search ONLY. Mathematical formula.</td></tr>
+      <tr><td>n ≤ 10¹⁸</td><td>O(log log n)</td><td>Mathematical insight. Rarely seen in interviews.</td></tr>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card orange">
+      <div class="card-title">// VALUE RANGE HINTS</div>
+      <h3>What value constraints tell you</h3>
+      <table class="constraint-table" style="margin-top:12px;">
+        <tr><th>CONSTRAINT</th><th>SIGNAL</th></tr>
+        <tr><td>values 1..n</td><td>Cyclic sort! Place at index val-1</td></tr>
+        <tr><td>values 0..1</td><td>Bit manipulation, XOR tricks</td></tr>
+        <tr><td>values distinct</td><td>Can use values as hash keys safely</td></tr>
+        <tr><td>sorted array</td><td>Two pointers, binary search</td></tr>
+        <tr><td>tree: n ≤ 10⁵</td><td>DFS/BFS is fine, O(n)</td></tr>
+        <tr><td>graph: edges sparse</td><td>Adjacency list, not matrix</td></tr>
+        <tr><td>sum fits int</td><td>No long needed</td></tr>
+        <tr><td>sum may overflow</td><td>Use long in Java!</td></tr>
+      </table>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title">// SPACE CONSTRAINTS</div>
+      <h3>Memory constraint signals</h3>
+      <ul style="margin-top:12px;">
+        <li><strong>"O(1) extra space"</strong> → In-place algorithm. Modify input. Cyclic sort, two pointers, Floyd's.</li>
+        <li><strong>"Can modify input"</strong> → Mark visited by negating value. Great for cycle detection.</li>
+        <li><strong>No constraint mentioned</strong> → Use a hash map freely. Memory is not the concern.</li>
+        <li><strong>"Space optimized"</strong> → Usually 1D DP instead of 2D. Rolling array trick.</li>
+      </ul>
+      <div class="info-box" style="margin-top:14px;">
+        💡 <strong>Rolling Array Trick:</strong> If dp[i] only depends on dp[i-1], you only need 2 variables, not an array!
+      </div>
+    </div>
+  </div>
+
+  <div class="card gold">
+    <div class="card-title">// LIVE EXAMPLE — DECODING A PROBLEM</div>
+    <h2>Problem: Find all pairs with sum = target</h2>
+    <div class="approach-flow" style="margin-top:20px;">
+      <div class="approach-step">
+        <div class="as-label">READ</div>
+        <div class="as-title">n ≤ 10⁵<br>values ±10⁹</div>
+        <div class="as-complexity">unsorted</div>
+      </div>
+      <div class="approach-step">
+        <div class="as-label">DECODE</div>
+        <div class="as-title">Need O(n log n) or O(n)</div>
+        <div class="as-complexity">no O(n²)</div>
+      </div>
+      <div class="approach-step">
+        <div class="as-label">HINT</div>
+        <div class="as-title">"pairs with sum" = Two pointers or HashMap</div>
+        <div class="as-complexity">classic pattern</div>
+      </div>
+      <div class="approach-step">
+        <div class="as-label">DECIDE</div>
+        <div class="as-title">HashMap O(n)<br>Sort + 2-ptr O(n log n)</div>
+        <div class="as-complexity">pick O(n)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APPROACH ===== -->
+<div id="tab-approach" class="section">
+  <div class="card orange">
+    <div class="card-title">// THE FRAMEWORK</div>
+    <h2>How to Approach Any Problem</h2>
+    <p>This is the exact mental framework used by candidates who pass Google/Meta/Amazon. Apply it every single time without exception.</p>
+  </div>
+
+  <div class="approach-flow">
+    <div class="approach-step" style="background: rgba(0,255,136,0.05); border-color: rgba(0,255,136,0.2);">
+      <div class="as-label">STEP 1</div>
+      <div class="as-title">READ + EXAMPLES</div>
+      <div class="as-complexity">~3 min</div>
+    </div>
+    <div class="approach-step">
+      <div class="as-label">STEP 2</div>
+      <div class="as-title">CONSTRAINTS</div>
+      <div class="as-complexity">decode n</div>
+    </div>
+    <div class="approach-step">
+      <div class="as-label">STEP 3</div>
+      <div class="as-title">BRUTE FORCE</div>
+      <div class="as-complexity">say it aloud</div>
+    </div>
+    <div class="approach-step">
+      <div class="as-label">STEP 4</div>
+      <div class="as-title">PATTERN MATCH</div>
+      <div class="as-complexity">which of 33?</div>
+    </div>
+    <div class="approach-step">
+      <div class="as-label">STEP 5</div>
+      <div class="as-title">OPTIMIZE</div>
+      <div class="as-complexity">bottleneck</div>
+    </div>
+    <div class="approach-step" style="background: rgba(0,255,136,0.05); border-color: rgba(0,255,136,0.2);">
+      <div class="as-label">STEP 6</div>
+      <div class="as-title">CODE + DRY RUN</div>
+      <div class="as-complexity">verify</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card green">
+      <div class="card-title">// STEP 3 — BRUTE FORCE TEMPLATE</div>
+      <h3>Always Start Brute Force</h3>
+      <p>Never skip brute force. Say it out loud in the interview. Then improve it.</p>
+      <div class="info-box">
+        <strong>Script:</strong> "The naive solution would be [describe in plain English]. That would be O([complexity]) time. Let me see if I can do better using [pattern]."
+      </div>
+      <h4>Brute Force Starters:</h4>
+      <ul>
+        <li><strong>Array problem?</strong> → Try all pairs: O(n²)</li>
+        <li><strong>String problem?</strong> → Try all substrings: O(n²) or O(n³)</li>
+        <li><strong>Tree problem?</strong> → Try all paths: O(n²)</li>
+        <li><strong>Graph problem?</strong> → BFS/DFS from every node: O(V·(V+E))</li>
+        <li><strong>Decision problem?</strong> → Recurse all possibilities: O(2ⁿ)</li>
+      </ul>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title">// STEP 4 — OPTIMIZATION TRIGGERS</div>
+      <h3>From Brute Force → Optimized</h3>
+      <ul>
+        <li><strong>Repeated work?</strong> → Memoization / DP</li>
+        <li><strong>Sorted input unused?</strong> → Binary Search or Two Pointers</li>
+        <li><strong>O(n²) nested loops?</strong> → Sliding Window or HashMap</li>
+        <li><strong>Repeatedly get min/max?</strong> → Heap</li>
+        <li><strong>Repeated substring/prefix?</strong> → Trie</li>
+        <li><strong>Graph connectivity?</strong> → Union-Find</li>
+        <li><strong>Range queries?</strong> → Prefix Sum or Segment Tree</li>
+        <li><strong>Optimal substructure?</strong> → Dynamic Programming</li>
+        <li><strong>Make local choice?</strong> → Greedy</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">// THE BUD TECHNIQUE</div>
+    <h2>Find the Bottleneck, Unnecessary Work, Duplicated Work</h2>
+    <div class="grid-3" style="margin-top:16px; gap:16px;">
+      <div style="background:var(--surface2); padding:16px; border-radius:4px; border:1px solid var(--border);">
+        <h4 style="color:var(--accent);">B — Bottleneck</h4>
+        <p>What's the slowest part of your algorithm? Target that specifically. E.g., O(n log n) sort + O(n²) lookup = O(n²) overall. Fix the lookup.</p>
+      </div>
+      <div style="background:var(--surface2); padding:16px; border-radius:4px; border:1px solid var(--border);">
+        <h4 style="color:var(--gold);">U — Unnecessary Work</h4>
+        <p>Are you computing things you don't need? E.g., checking all pairs when you only need one. Early exit, prune search space.</p>
+      </div>
+      <div style="background:var(--surface2); padding:16px; border-radius:4px; border:1px solid var(--border);">
+        <h4 style="color:var(--accent2);">D — Duplicated Work</h4>
+        <p>Are you solving the same subproblem multiple times? Cache it. This is where DP and memoization come from.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">// COMPLEXITY ANALYSIS EVERY TIME</div>
+    <h2>Time & Space — Say It Before Writing Code</h2>
+    <div class="cheat-row"><div class="cheat-key">Single loop</div><div class="cheat-val">O(n)</div></div>
+    <div class="cheat-row"><div class="cheat-key">Nested loops</div><div class="cheat-val">O(n²) — or O(n·m) for different sizes</div></div>
+    <div class="cheat-row"><div class="cheat-key">Binary search</div><div class="cheat-val">O(log n)</div></div>
+    <div class="cheat-row"><div class="cheat-key">Merge sort / heap ops on n items</div><div class="cheat-val">O(n log n)</div></div>
+    <div class="cheat-row"><div class="cheat-key">Recursive with branching factor b, depth d</div><div class="cheat-val">O(b^d)</div></div>
+    <div class="cheat-row"><div class="cheat-key">DFS / BFS on graph</div><div class="cheat-val">O(V + E)</div></div>
+    <div class="cheat-row"><div class="cheat-key">2D DP of size m×n</div><div class="cheat-val">O(m·n) time and space</div></div>
+    <div class="cheat-row"><div class="cheat-key">Recursion stack depth d</div><div class="cheat-val">O(d) space</div></div>
+  </div>
+</div>
+
+<!-- ===== DRY RUN ===== -->
+<div id="tab-dryrun" class="section">
+  <div class="card orange">
+    <div class="card-title">// NEVER SKIP THIS</div>
+    <h2>How to Dry Run — The Right Way</h2>
+    <p>Dry running is executing your code mentally, line by line, with a small example. 80% of bugs are caught here — before the interviewer points them out.</p>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">// THE 5-STEP DRY RUN PROTOCOL</div>
+    <h2>Protocol</h2>
+    <div style="margin-top: 16px;">
+
+      <div class="dry-run-step highlight">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Choose a small, non-trivial example</strong>
+          <p style="margin-top:6px;">Not too small (edge case only), not too large (takes forever). 4-6 elements is ideal. Include at least one edge case (empty, single element, duplicates).</p>
+          <div class="warn-box" style="margin-top:8px;">❌ Bad example: [1, 2] &nbsp;&nbsp;&nbsp; ✅ Good example: [3, 1, 4, 1, 5, 9, 2]</div>
+        </div>
+      </div>
+
+      <div class="dry-run-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Write out ALL variables in a table</strong>
+          <p style="margin-top:6px;">Before execution, list every variable with its initial value. Draw the data structure (array boxes, tree nodes, stack).</p>
+          <div class="step-vars" style="margin-top:10px;">
+            <div class="var-box"><span class="vname">i = </span><span class="vval">0</span></div>
+            <div class="var-box"><span class="vname">left = </span><span class="vval">0</span></div>
+            <div class="var-box"><span class="vname">right = </span><span class="vval">5</span></div>
+            <div class="var-box"><span class="vname">result = </span><span class="vval">[]</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dry-run-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Execute line by line — no skipping</strong>
+          <p style="margin-top:6px;">Go through every iteration of every loop. Update variable values with each step. When you hit a conditional, evaluate it explicitly with current values.</p>
+          <div class="info-box" style="margin-top:8px;">Say out loud: "i=0, nums[0]=3, sum=3+9=12, target=10, 12 > 10, so right--"</div>
+        </div>
+      </div>
+
+      <div class="dry-run-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>Verify invariants hold at each step</strong>
+          <p style="margin-top:6px;">What should always be true? E.g., "left ≤ right", "window is always valid", "stack is always monotonic". Check it every iteration.</p>
+        </div>
+      </div>
+
+      <div class="dry-run-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <strong>Check boundary conditions last</strong>
+          <p style="margin-top:6px;">After the main example works, test: empty input, single element, all same elements, sorted input, reverse sorted, maximum constraint.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <div class="card-title">// LIVE DRY RUN EXAMPLE</div>
+    <h2>Two Sum — Step by Step</h2>
+    <p>Input: nums = [2, 7, 11, 15], target = 9</p>
+    <div class="code-block" style="margin-top:16px;">
+<span class="type">Map</span>&lt;<span class="type">Integer</span>,<span class="type">Integer</span>&gt; <span class="var">map</span> = <span class="kw">new</span> <span class="fn">HashMap</span>(); <span class="cmt">// {}</span>
+<span class="kw">for</span> (<span class="type">int</span> <span class="var">i</span>=<span class="num">0</span>; <span class="var">i</span>&lt;nums.length; <span class="var">i</span>++) {
+  <span class="type">int</span> <span class="var">comp</span> = <span class="var">target</span> - nums[<span class="var">i</span>];
+  <span class="kw">if</span> (<span class="var">map</span>.<span class="fn">containsKey</span>(<span class="var">comp</span>))
+    <span class="kw">return new int</span>[]{<span class="var">map</span>.<span class="fn">get</span>(<span class="var">comp</span>), <span class="var">i</span>};
+  <span class="var">map</span>.<span class="fn">put</span>(nums[<span class="var">i</span>], <span class="var">i</span>);
+}</div>
+
+    <div style="margin-top:16px;">
+      <div class="dry-run-step highlight">
+        <div class="step-num">i=0</div>
+        <div class="step-content">
+          nums[0]=2, comp=9-2=<strong>7</strong> → map.containsKey(7)? NO → map.put(2,0)
+          <div class="step-vars">
+            <div class="var-box"><span class="vname">map = </span><span class="vval">{2:0}</span></div>
+            <div class="var-box"><span class="vname">comp = </span><span class="vval">7</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="dry-run-step highlight">
+        <div class="step-num">i=1</div>
+        <div class="step-content">
+          nums[1]=7, comp=9-7=<strong>2</strong> → map.containsKey(2)? <span style="color:var(--accent)">YES!</span> → return [map.get(2), 1] = [0, 1]
+          <div class="step-vars">
+            <div class="var-box"><span class="vname">comp = </span><span class="vval">2</span></div>
+            <div class="var-box"><span class="vname">FOUND at </span><span class="vval">[0, 1] ✓</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">// DRY RUN CHECKLISTS</div>
+    <div class="grid-2" style="margin-top:8px;">
+      <div>
+        <h3>Array/String Problems</h3>
+        <ul style="margin-top:10px;">
+          <li>Are indices within bounds at all times?</li>
+          <li>Off-by-one? (< vs <=, 0-indexed vs 1-indexed)</li>
+          <li>What happens at i=0 and i=n-1?</li>
+          <li>Empty array input handled?</li>
+          <li>Single element input handled?</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Tree/Graph Problems</h3>
+        <ul style="margin-top:10px;">
+          <li>Null node base case handled?</li>
+          <li>Are you modifying the tree when you shouldn't?</li>
+          <li>Graph: visited set updated before or after exploring?</li>
+          <li>Directed vs undirected — tracking right direction?</li>
+          <li>Disconnected graph handled?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 60-DAY PLAN ===== -->
+<div id="tab-plan60" class="section">
+  <div class="card green">
+    <div class="card-title">// THE GOD PLAN</div>
+    <h2>60 Days to Big Tech — Week by Week</h2>
+    <p>This is optimized for maximum retention and interview readiness. Each week builds on the last. Do NOT skip weeks.</p>
+    <div class="progress-bar" style="margin-top:16px; height:6px;"><div class="progress-fill" style="width:100%;"></div></div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-num">W1</div>
+      <div class="week-info">
+        <h3>FOUNDATIONS — Arrays, Strings, Two Pointers</h3>
+        <p>Master the fundamentals. 80% of easy problems solved with these.</p>
+      </div>
+      <div class="week-badge"><span class="badge" style="background:var(--accent4); color:#000;">DAYS 1–7</span></div>
+    </div>
+    <div class="day-grid">
+      <div class="day-item"><div class="day-label">DAY 1</div><div class="day-topic">Arrays: prefix sum, two pointers basics</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 2</div><div class="day-topic">Two Pointers: 3Sum, Container Water</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 3</div><div class="day-topic">Sliding Window: fixed size</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 4</div><div class="day-topic">Sliding Window: variable size</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 5</div><div class="day-topic">Hash Maps: frequency counting</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 6</div><div class="day-topic">String manipulation, anagrams</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 7</div><div class="day-topic">REVIEW + 3 mixed problems</div><div class="day-count">Review</div></div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-num">W2</div>
+      <div class="week-info">
+        <h3>BINARY SEARCH + LINKED LISTS</h3>
+        <p>Deep dive binary search. All linked list patterns.</p>
+      </div>
+      <div class="week-badge"><span class="badge" style="background:var(--accent3); color:#fff;">DAYS 8–14</span></div>
+    </div>
+    <div class="day-grid">
+      <div class="day-item"><div class="day-label">DAY 8</div><div class="day-topic">Binary Search: classic & rotated array</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 9</div><div class="day-topic">Binary Search on answer: Koko, Capacity</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 10</div><div class="day-topic">Linked List: reverse, detect cycle</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 11</div><div class="day-topic">Linked List: fast/slow, find middle</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 12</div><div class="day-topic">Linked List: merge, reorder</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 13</div><div class="day-topic">Stack: valid parens, min stack</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 14</div><div class="day-topic">REVIEW + mock interview</div><div class="day-count">Review</div></div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-num">W3</div>
+      <div class="week-info">
+        <h3>TREES — Complete Mastery</h3>
+        <p>DFS, BFS, BST, path problems. Trees = 25% of interviews.</p>
+      </div>
+      <div class="week-badge"><span class="badge" style="background:var(--accent2); color:#fff;">DAYS 15–21</span></div>
+    </div>
+    <div class="day-grid">
+      <div class="day-item"><div class="day-label">DAY 15</div><div class="day-topic">Tree DFS: preorder, inorder, postorder</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 16</div><div class="day-topic">Tree BFS: level order, zigzag</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 17</div><div class="day-topic">BST: validate, search, LCA</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 18</div><div class="day-topic">Tree paths: max path sum, diameter</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 19</div><div class="day-topic">Tree construction: from traversals</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 20</div><div class="day-topic">Heap / Priority Queue problems</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 21</div><div class="day-topic">REVIEW + hard tree problem</div><div class="day-count">Review</div></div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-num">W4</div>
+      <div class="week-info">
+        <h3>GRAPHS — All Graph Algorithms</h3>
+        <p>BFS/DFS, Dijkstra, Union-Find, Topological Sort.</p>
+      </div>
+      <div class="week-badge"><span class="badge" style="background:var(--gold); color:#000;">DAYS 22–28</span></div>
+    </div>
+    <div class="day-grid">
+      <div class="day-item"><div class="day-label">DAY 22</div><div class="day-topic">Graph BFS/DFS: clone graph, islands</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 23</div><div class="day-topic">Union-Find: connected components</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 24</div><div class="day-topic">Topological Sort: course schedule</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 25</div><div class="day-topic">Dijkstra: network delay, cheap flights</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 26</div><div class="day-topic">Multi-source BFS: rotting oranges</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 27</div><div class="day-topic">Grid problems: Pacific Atlantic</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 28</div><div class="day-topic">REVIEW + hard graph problem</div><div class="day-count">Review</div></div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-num">W5</div>
+      <div class="week-info">
+        <h3>DYNAMIC PROGRAMMING — The Big Boss</h3>
+        <p>1D, 2D, Knapsack, String DP. This week separates good from great.</p>
+      </div>
+      <div class="week-badge"><span class="badge" style="background:var(--accent2); color:#fff;">DAYS 29–35</span></div>
+    </div>
+    <div class="day-grid">
+      <div class="day-item"><div class="day-label">DAY 29</div><div class="day-topic">1D DP: climbing stairs, house robber</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 30</div><div class="day-topic">1D DP: decode ways, word break</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 31</div><div class="day-topic">2D DP: unique paths, edit distance</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 32</div><div class="day-topic">Knapsack: coin change, partition subset</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 33</div><div class="day-topic">LCS / String DP patterns</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 34</div><div class="day-topic">Intervals DP, palindrome DP</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 35</div><div class="day-topic">REVIEW + 2 hard DP problems</div><div class="day-count">Review</div></div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-num">W6</div>
+      <div class="week-info">
+        <h3>ADVANCED PATTERNS + BACKTRACKING</h3>
+        <p>Trie, Monotonic Stack, Backtracking, Advanced techniques.</p>
+      </div>
+      <div class="week-badge"><span class="badge" style="background:var(--accent3); color:#fff;">DAYS 36–42</span></div>
+    </div>
+    <div class="day-grid">
+      <div class="day-item"><div class="day-label">DAY 36</div><div class="day-topic">Backtracking: subsets, permutations</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 37</div><div class="day-topic">Backtracking: N-Queens, Sudoku</div><div class="day-count">2 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 38</div><div class="day-topic">Trie: implement, word search II</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 39</div><div class="day-topic">Monotonic Stack: histogram, temps</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 40</div><div class="day-topic">Bit Manipulation: single num, subsets</div><div class="day-count">4 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 41</div><div class="day-topic">Math patterns: prime sieve, matrix rotate</div><div class="day-count">3 problems</div></div>
+      <div class="day-item"><div class="day-label">DAY 42</div><div class="day-topic">REVIEW + weekly mock</div><div class="day-count">Review</div></div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-num">W7–W8</div>
+      <div class="week-info">
+        <h3>HARD PROBLEMS + MOCK INTERVIEWS</h3>
+        <p>Company-specific patterns. Simulate real interview pressure. 2 mocks per week.</p>
+      </div>
+      <div class="week-badge"><span class="badge" style="background:var(--accent); color:#000;">DAYS 43–56</span></div>
+    </div>
+    <div class="day-grid">
+      <div class="day-item"><div class="day-label">DAYS 43–49</div><div class="day-topic">Google: focus on DP, graphs, string manipulation</div><div class="day-count">3-4/day</div></div>
+      <div class="day-item"><div class="day-label">DAYS 50–56</div><div class="day-topic">Meta/Amazon: arrays, trees, system design awareness</div><div class="day-count">3-4/day</div></div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-num">W9</div>
+      <div class="week-info">
+        <h3>FINAL SPRINT — Weak Areas + 60 Most Important Problems</h3>
+        <p>Only practice problems you got wrong. Timed sessions. Full interview simulation.</p>
+      </div>
+      <div class="week-badge"><span class="badge" style="background:var(--gold); color:#000;">DAYS 57–60</span></div>
+    </div>
+    <div class="day-grid">
+      <div class="day-item"><div class="day-label">DAY 57</div><div class="day-topic">Revisit all wrong problems from Week 1-3</div><div class="day-count">Targeted</div></div>
+      <div class="day-item"><div class="day-label">DAY 58</div><div class="day-topic">Revisit all wrong problems from Week 4-6</div><div class="day-count">Targeted</div></div>
+      <div class="day-item"><div class="day-label">DAY 59</div><div class="day-topic">Full mock interview: 2 problems in 45 min</div><div class="day-count">Simulation</div></div>
+      <div class="day-item"><div class="day-label">DAY 60</div><div class="day-topic">REST + light pattern review only</div><div class="day-count">🧘</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== MEMORY ===== -->
+<div id="tab-memory" class="section">
+  <div class="card purple">
+    <div class="card-title">// REMEMBER FOREVER</div>
+    <h2>Memory Techniques for DSA</h2>
+    <p>Pattern recognition is memory. Build strong mental models — not just code.</p>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3 style="margin-bottom:16px; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:2px; color:var(--muted);">// MNEMONICS FOR EACH PATTERN</h3>
+
+      <div class="mnemonic-card">
+        <div class="mnemonic-title">TWO POINTERS</div>
+        <div class="mnemonic-text">🏃 TWO RUNNERS</div>
+        <p>One from each end, they meet in the middle. If sum too big → move right runner left. Too small → move left runner right.</p>
+      </div>
+
+      <div class="mnemonic-card">
+        <div class="mnemonic-title">SLIDING WINDOW</div>
+        <div class="mnemonic-text">🚂 TRAIN WINDOW</div>
+        <p>You see a fixed slice of the train's journey. Slide the window right — what's past the window is gone.</p>
+      </div>
+
+      <div class="mnemonic-card">
+        <div class="mnemonic-title">FAST/SLOW POINTERS</div>
+        <div class="mnemonic-text">🐢🐇 FABLE</div>
+        <p>The hare runs 2x faster. If there's a loop, the hare will lap the tortoise. They'll meet inside the cycle.</p>
+      </div>
+
+      <div class="mnemonic-card">
+        <div class="mnemonic-title">UNION-FIND</div>
+        <div class="mnemonic-text">👨‍👩‍👧 FAMILY BOSS</div>
+        <p>Every person has one boss (root). To merge families: make one boss report to the other. Path compression = go directly to the big boss.</p>
+      </div>
+
+      <div class="mnemonic-card">
+        <div class="mnemonic-title">TOPOLOGICAL SORT</div>
+        <div class="mnemonic-text">👔 GET DRESSED</div>
+        <p>You can't wear shoes before socks. Order tasks by dependencies. Start with who depends on nobody (in-degree 0).</p>
+      </div>
+
+      <div class="mnemonic-card">
+        <div class="mnemonic-title">DYNAMIC PROGRAMMING</div>
+        <div class="mnemonic-text">📚 TEXTBOOK CHAPTERS</div>
+        <p>Chapter 5 builds on chapters 1-4. You can't skip. Solve tiny version → use that answer to solve slightly bigger version.</p>
+      </div>
+
+      <div class="mnemonic-card">
+        <div class="mnemonic-title">BINARY SEARCH</div>
+        <div class="mnemonic-text">📖 DICTIONARY SEARCH</div>
+        <p>Open to the middle. Is the word before or after? Throw away half. Repeat until found. Works whenever "left half all fail, right half all pass" or vice versa.</p>
+      </div>
+
+      <div class="mnemonic-card">
+        <div class="mnemonic-title">MONOTONIC STACK</div>
+        <div class="mnemonic-text">🏔️ MOUNTAIN RANGE</div>
+        <p>You're hiking and looking back at peaks behind you. When you hit a taller peak, all shorter peaks behind you are "blocked" — pop them and record their answer.</p>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom:16px; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:2px; color:var(--muted);">// PATTERN TRIGGER WORDS</h3>
+
+      <div class="card surface" style="background:var(--surface2); border:1px solid var(--border); padding:20px;">
+        <p style="font-size:12px; color:var(--muted); margin-bottom:12px; font-family:'Space Mono',monospace; letter-spacing:1px;">WHEN YOU SEE THIS → USE THIS PATTERN</p>
+        <div class="cheat-row"><div class="cheat-key">sorted array + pair/triplet</div><div class="cheat-val">Two Pointers</div></div>
+        <div class="cheat-row"><div class="cheat-key">subarray / substring</div><div class="cheat-val">Sliding Window</div></div>
+        <div class="cheat-key" style="display:none"></div>
+        <div class="cheat-row"><div class="cheat-key">cycle in linked list</div><div class="cheat-val">Fast/Slow Pointers</div></div>
+        <div class="cheat-row"><div class="cheat-key">overlapping intervals</div><div class="cheat-val">Merge Intervals (sort by start)</div></div>
+        <div class="cheat-row"><div class="cheat-key">search / find in sorted</div><div class="cheat-val">Binary Search</div></div>
+        <div class="cheat-row"><div class="cheat-key">shortest path, min steps</div><div class="cheat-val">BFS (unweighted) / Dijkstra (weighted)</div></div>
+        <div class="cheat-row"><div class="cheat-key">all possibilities, combinations</div><div class="cheat-val">Backtracking / DFS</div></div>
+        <div class="cheat-row"><div class="cheat-key">top K, K-th largest</div><div class="cheat-val">Heap (size K)</div></div>
+        <div class="cheat-row"><div class="cheat-key">next greater element</div><div class="cheat-val">Monotonic Stack</div></div>
+        <div class="cheat-row"><div class="cheat-key">connected components</div><div class="cheat-val">Union-Find or BFS/DFS</div></div>
+        <div class="cheat-row"><div class="cheat-key">prefix/word matching</div><div class="cheat-val">Trie</div></div>
+        <div class="cheat-row"><div class="cheat-key">dependency ordering</div><div class="cheat-val">Topological Sort</div></div>
+        <div class="cheat-row"><div class="cheat-key">optimal substructure</div><div class="cheat-val">Dynamic Programming</div></div>
+        <div class="cheat-row"><div class="cheat-key">local optimal = global optimal</div><div class="cheat-val">Greedy</div></div>
+        <div class="cheat-row"><div class="cheat-key">values in range [1..n]</div><div class="cheat-val">Cyclic Sort</div></div>
+        <div class="cheat-row"><div class="cheat-key">find unique / XOR</div><div class="cheat-val">Bit Manipulation</div></div>
+        <div class="cheat-row"><div class="cheat-key">range sum/min/max queries</div><div class="cheat-val">Prefix Sum / Segment Tree</div></div>
+      </div>
+
+      <div class="mnemonic-card" style="margin-top:20px;">
+        <div class="mnemonic-title">THE SPACED REPETITION SECRET</div>
+        <div class="mnemonic-text" style="font-size:16px;">Review pattern 4 times: 1h → 1d → 3d → 1w</div>
+        <p>After solving a problem, revisit it at these intervals without looking at the solution. This is how you build permanent memory. Use Anki or just track dates.</p>
+      </div>
+
+      <div class="warn-box">
+        <strong>💡 The Real Secret:</strong> Don't memorize solutions — memorize the <em>decision process</em>. "When I see X, I think Y because Z." The code always follows from the insight.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="tab-quiz" class="section">
+  <div class="card gold">
+    <div class="card-title">// TEST YOUR PATTERN RECOGNITION</div>
+    <h2>Pattern Recognition Quiz</h2>
+    <p>Read the problem description and identify which pattern to use. This is the most important skill.</p>
+  </div>
+
+  <div id="quiz-container">
+    <div class="quiz-card" id="q1">
+      <div class="card-title">QUESTION 1</div>
+      <div class="quiz-question">Given an array of integers, find two numbers that add up to a target. Array is NOT sorted. n ≤ 10⁵.</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="answer(this, false)">A) Binary Search — O(log n)</button>
+        <button class="quiz-option" onclick="answer(this, true)">B) Hash Map — O(n) time, O(n) space</button>
+        <button class="quiz-option" onclick="answer(this, false)">C) Two Pointers — sort first O(n log n)</button>
+        <button class="quiz-option" onclick="answer(this, false)">D) Sliding Window — O(n)</button>
+      </div>
+      <div id="q1-explain" style="display:none; margin-top:12px;" class="info-box">
+        ✅ <strong>Hash Map wins!</strong> Store each number's index. For each num, check if (target - num) exists in map. O(n) time. Two pointers also works but needs sorting first → O(n log n). Binary search needs sorted input too.
+      </div>
+    </div>
+
+    <div class="quiz-card" id="q2">
+      <div class="card-title">QUESTION 2</div>
+      <div class="quiz-question">Find the longest substring without repeating characters. Return its length.</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="answer2(this, false)">A) Two Pointers on sorted chars</button>
+        <button class="quiz-option" onclick="answer2(this, true)">B) Sliding Window with HashMap</button>
+        <button class="quiz-option" onclick="answer2(this, false)">C) Dynamic Programming</button>
+        <button class="quiz-option" onclick="answer2(this, false)">D) Binary Search on length</button>
+      </div>
+      <div id="q2-explain" style="display:none; margin-top:12px;" class="info-box">
+        ✅ <strong>Sliding Window!</strong> Classic variable-size window. Expand right pointer, if duplicate found → shrink left pointer until valid. Map stores last seen index of each char.
+      </div>
+    </div>
+
+    <div class="quiz-card" id="q3">
+      <div class="card-title">QUESTION 3</div>
+      <div class="quiz-question">You have a list of courses [a, b] meaning "a must be taken before b". Can you finish all courses? (Detect if cycle exists)</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="answer3(this, false)">A) BFS shortest path</button>
+        <button class="quiz-option" onclick="answer3(this, false)">B) Union-Find</button>
+        <button class="quiz-option" onclick="answer3(this, true)">C) Topological Sort (Kahn's) — cycle detection</button>
+        <button class="quiz-option" onclick="answer3(this, false)">D) Dynamic Programming</button>
+      </div>
+      <div id="q3-explain" style="display:none; margin-top:12px;" class="info-box">
+        ✅ <strong>Topological Sort!</strong> Build a directed graph. If after Kahn's algorithm (process all in-degree 0 nodes), not all nodes are processed → cycle exists → impossible. DFS with state coloring also works.
+      </div>
+    </div>
+
+    <div class="quiz-card" id="q4">
+      <div class="card-title">QUESTION 4</div>
+      <div class="quiz-question">Find the K-th largest element in an unsorted array. n ≤ 10⁶.</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="answer4(this, false)">A) Sort and index — O(n log n)</button>
+        <button class="quiz-option" onclick="answer4(this, true)">B) Min-Heap of size K — O(n log K)</button>
+        <button class="quiz-option" onclick="answer4(this, false)">C) Binary Search — O(n log n)</button>
+        <button class="quiz-option" onclick="answer4(this, false)">D) Two Pointers</button>
+      </div>
+      <div id="q4-explain" style="display:none; margin-top:12px;" class="info-box">
+        ✅ <strong>Min-Heap of size K!</strong> Maintain heap of K elements. If new element > heap minimum → pop min, push new element. Final heap contains top K elements; root is K-th largest. Also: QuickSelect O(n) avg if asked for optimal.
+      </div>
+    </div>
+
+    <div class="quiz-card" id="q5">
+      <div class="card-title">QUESTION 5</div>
+      <div class="quiz-question">You can climb 1 or 2 stairs at a time. How many distinct ways to reach stair n?</div>
+      <div class="quiz-options">
+        <button class="quiz-option" onclick="answer5(this, false)">A) Backtracking</button>
+        <button class="quiz-option" onclick="answer5(this, false)">B) BFS</button>
+        <button class="quiz-option" onclick="answer5(this, true)">C) Dynamic Programming (1D)</button>
+        <button class="quiz-option" onclick="answer5(this, false)">D) Greedy</button>
+      </div>
+      <div id="q5-explain" style="display:none; margin-top:12px;" class="info-box">
+        ✅ <strong>1D Dynamic Programming!</strong> dp[i] = ways to reach step i = dp[i-1] + dp[i-2]. This is literally Fibonacci. Optimal substructure: to reach step i, you came from i-1 or i-2. Only need 2 variables (space optimized).
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px;">
+    <button class="btn" onclick="resetQuiz()">RESET QUIZ</button>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function answer(btn, correct) {
+  const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-option');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) {
+    opts.forEach(o => { if (o.textContent.includes('Hash Map')) o.classList.add('correct'); });
+  }
+  document.getElementById('q1-explain').style.display = 'block';
+}
+function answer2(btn, correct) {
+  const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-option');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) { opts.forEach(o => { if (o.textContent.includes('Sliding Window')) o.classList.add('correct'); }); }
+  document.getElementById('q2-explain').style.display = 'block';
+}
+function answer3(btn, correct) {
+  const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-option');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) { opts.forEach(o => { if (o.textContent.includes('Topological')) o.classList.add('correct'); }); }
+  document.getElementById('q3-explain').style.display = 'block';
+}
+function answer4(btn, correct) {
+  const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-option');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) { opts.forEach(o => { if (o.textContent.includes('Min-Heap')) o.classList.add('correct'); }); }
+  document.getElementById('q4-explain').style.display = 'block';
+}
+function answer5(btn, correct) {
+  const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-option');
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) { opts.forEach(o => { if (o.textContent.includes('Dynamic')) o.classList.add('correct'); }); }
+  document.getElementById('q5-explain').style.display = 'block';
+}
+function resetQuiz() {
+  document.querySelectorAll('.quiz-option').forEach(o => {
+    o.disabled = false;
+    o.classList.remove('correct', 'wrong');
+  });
+  ['q1-explain','q2-explain','q3-explain','q4-explain','q5-explain'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+}
+</script>
+</body>
+</html>
