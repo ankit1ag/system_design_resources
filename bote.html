@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Design BOTE — Complete Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07070f;--surf:#0f0f1c;--surf2:#161626;--surf3:#1e1e30;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);--border3:rgba(255,255,255,0.18);
+  --text:#e4e4f0;--muted:#6e6e90;--dim:#3a3a55;
+  --blue:#5b9cf6;--blue-bg:rgba(91,156,246,0.1);--blue-b:rgba(91,156,246,0.22);
+  --teal:#2dd4bf;--teal-bg:rgba(45,212,191,0.1);--teal-b:rgba(45,212,191,0.22);
+  --amber:#f59e0b;--amber-bg:rgba(245,158,11,0.1);--amber-b:rgba(245,158,11,0.22);
+  --coral:#f97316;--coral-bg:rgba(249,115,22,0.1);--coral-b:rgba(249,115,22,0.22);
+  --purple:#a78bfa;--purple-bg:rgba(167,139,250,0.1);--purple-b:rgba(167,139,250,0.22);
+  --green:#4ade80;--green-bg:rgba(74,222,128,0.1);--green-b:rgba(74,222,128,0.22);
+  --pink:#f472b6;--pink-bg:rgba(244,114,182,0.1);--pink-b:rgba(244,114,182,0.22);
+  --red:#f87171;--red-bg:rgba(248,113,113,0.1);--red-b:rgba(248,113,113,0.22);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:14px;line-height:1.7;}
+
+/* ── HERO ── */
+.hero{padding:72px 40px 56px;position:relative;overflow:hidden;border-bottom:1px solid var(--border2);}
+.hero::before{content:'';position:absolute;top:-300px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(91,156,246,0.07) 0%,transparent 65%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-200px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.05) 0%,transparent 65%);pointer-events:none;}
+.hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:1;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--blue-bg);border:1px solid var(--blue-b);color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;padding:4px 12px;border-radius:4px;margin-bottom:24px;text-transform:uppercase;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1.02;letter-spacing:-.025em;margin-bottom:16px;}
+.hero h1 em{font-style:normal;color:var(--blue);}
+.hero-sub{font-size:16px;color:var(--muted);max-width:580px;margin-bottom:40px;line-height:1.65;}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;}
+.pill{font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);}
+.hero-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;max-width:560px;}
+.hero-num-cell{background:var(--surf);padding:16px 20px;}
+.hero-num-val{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1;}
+.hero-num-label{font-size:11px;color:var(--muted);margin-top:3px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.07em;}
+
+/* ── NAV ── */
+.nav{background:rgba(7,7,15,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:200;overflow-x:auto;}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;padding:0 40px;}
+.nav a{display:block;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:.15s;text-transform:uppercase;letter-spacing:.07em;}
+.nav a:hover{color:var(--text);border-bottom-color:var(--blue);}
+
+/* ── LAYOUT ── */
+.wrap{max-width:960px;margin:0 auto;padding:64px 40px;}
+.section{margin-bottom:80px;}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:4px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;border:1px solid;}
+.sec-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.015em;}
+.divider{border:none;border-top:1px solid var(--border);margin:64px 0;}
+p.intro{color:var(--muted);margin-bottom:24px;font-size:13px;line-height:1.7;max-width:700px;}
+
+/* ── CODE ── */
+.code{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;overflow-x:auto;white-space:pre;}
+.code .c{color:var(--muted);}
+.code .v{color:var(--blue);}
+.code .r{color:var(--green);font-weight:600;}
+.code .h{color:var(--amber);}
+.code .f{color:var(--teal);}
+.code .w{color:var(--coral);}
+.code .p{color:var(--purple);}
+.code .bad{color:var(--red);}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+
+/* ── CARDS ── */
+.card{background:var(--surf);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.card:hover{border-color:var(--border2);}
+.card-head{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;}
+.card-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;flex-shrink:0;}
+.card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:2px;}
+.card-sub{font-size:12px;color:var(--muted);}
+.card-body{padding:16px 20px;}
+.formula{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);line-height:1.9;margin-bottom:12px;overflow-x:auto;white-space:pre;}
+.sig-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px;}
+.sig-item{font-size:12px;color:var(--muted);line-height:1.7;padding-left:12px;position:relative;}
+.sig-item::before{content:'→';position:absolute;left:0;color:var(--dim);font-family:'JetBrains Mono',monospace;}
+
+/* ── TABLES ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{text-align:left;padding:9px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--border2);background:var(--surf2);}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--surf2);}
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap;}
+.mono{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
+
+/* ── FORMULA BOX ── */
+.fbox{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:14px;}
+.fbox-label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;}
+
+/* ── ALERT ── */
+.alert{border-radius:10px;padding:16px 20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.alert-body{font-size:13px;line-height:1.6;}
+.alert-body strong{font-weight:600;}
+.alert-warn{background:var(--amber-bg);border:1px solid var(--amber-b);}
+.alert-warn .alert-body{color:var(--text);}
+.alert-warn .alert-body strong{color:var(--amber);}
+.alert-info{background:var(--blue-bg);border:1px solid var(--blue-b);}
+.alert-info .alert-body strong{color:var(--blue);}
+.alert-danger{background:var(--red-bg);border:1px solid var(--red-b);}
+.alert-danger .alert-body strong{color:var(--red);}
+.alert-success{background:var(--green-bg);border:1px solid var(--green-b);}
+.alert-success .alert-body strong{color:var(--green);}
+
+/* ── CASE STUDY ── */
+.case{background:var(--surf);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:28px;}
+.case-hd{padding:26px 28px 22px;border-bottom:1px solid var(--border);display:flex;gap:18px;align-items:flex-start;border-left:4px solid;}
+.case-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.case-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px;}
+.case-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+.case-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.case-body{padding:26px 28px;}
+.step-hd{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.step-hd::after{content:'';flex:1;height:1px;background:var(--border);}
+.case-steps{display:flex;flex-direction:column;gap:18px;}
+
+/* ── RESULTS ── */
+.res-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:18px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.res-tbl th{text-align:left;padding:9px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);background:var(--surf2);border-bottom:1px solid var(--border2);}
+.res-tbl td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;}
+.res-tbl tr:last-child td{border-bottom:none;}
+.rnum{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;}
+
+/* ── MEMORY CARDS ── */
+.mem-card{background:var(--surf);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.mem-hd{padding:12px 16px;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+.mem-body{padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:2.2;white-space:pre;}
+.mem-body .hl{color:var(--amber);}
+.mem-body .bl{color:var(--blue);}
+.mem-body .gl{color:var(--green);}
+.mem-body .pl{color:var(--purple);}
+.mem-body .tl{color:var(--teal);}
+.mem-body .cl{color:var(--coral);}
+
+/* ── MISTAKE ── */
+.mistake{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:12px;}
+.mis-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--coral);display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.mis-title::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--coral);flex-shrink:0;}
+.mis-bad{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--red);background:var(--red-bg);border:1px solid var(--red-b);padding:8px 14px;border-radius:6px;margin-bottom:6px;}
+.mis-good{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);background:var(--green-bg);border:1px solid var(--green-b);padding:8px 14px;border-radius:6px;margin-bottom:8px;}
+.mis-note{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* ── QUICK REF ── */
+.qr{background:var(--surf);border:1px solid var(--border2);border-radius:16px;padding:32px 36px;}
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;}
+.qr-sec-title{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border);font-weight:600;}
+.qr-lines{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:2.2;color:var(--muted);}
+.qr-lines .eq{color:var(--teal);}
+
+/* ── FRAMEWORK ── */
+.fw-step{display:flex;gap:18px;padding:18px 22px;border-bottom:1px solid var(--border);transition:.15s;}
+.fw-step:hover{background:var(--surf2);}
+.fw-step:last-child{border-bottom:none;}
+.fw-num{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;flex-shrink:0;}
+.fw-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:3px;}
+.fw-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+.fw-formula{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);background:var(--bg);border:1px solid var(--border);padding:5px 12px;border-radius:5px;display:inline-block;margin-top:7px;}
+
+/* ── THRESHOLD TABLE ── */
+.thresh{display:flex;flex-direction:column;gap:2px;}
+.thresh-row{display:grid;grid-template-columns:180px 1fr 1fr;gap:0;background:var(--surf);border-radius:0;}
+.thresh-row:first-child{border-radius:10px 10px 0 0;}
+.thresh-row:last-child{border-radius:0 0 10px 10px;}
+.thresh-row.hdr{background:var(--surf2);border:1px solid var(--border2);border-radius:8px 8px 0 0;}
+.thresh-cell{padding:10px 16px;border-bottom:1px solid var(--border);font-size:12px;}
+.thresh-row:last-child .thresh-cell{border-bottom:none;}
+.thresh-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;}
+
+/* ── AVAILABILITY ── */
+.avail-bar{height:6px;border-radius:3px;margin-bottom:4px;background:linear-gradient(90deg,var(--green),var(--teal));}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--border);padding:36px 40px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:.06em;}
+
+@media(max-width:640px){
+  .hero,.wrap{padding:40px 20px;}
+  .nav-inner{padding:0 20px;}
+  .case-hd,.case-body{padding:18px 20px;}
+  .qr{padding:22px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">⚡ FAANG Interview Prep</div>
+    <h1>Back of the Envelope<br><em>Calculations</em></h1>
+    <p class="hero-sub">The most exhaustive BOTE reference on the internet. Every formula, every threshold, every case study — explained like you're 15.</p>
+    <div class="hero-pills">
+      <span class="pill">Traffic & QPS</span><span class="pill">Storage</span><span class="pill">Bandwidth</span>
+      <span class="pill">Cache & Servers</span><span class="pill">Availability</span><span class="pill">Thundering Herd</span>
+      <span class="pill">Fan-out</span><span class="pill">Cost Estimation</span><span class="pill">6 Case Studies</span>
+    </div>
+    <div class="hero-nums">
+      <div class="hero-num-cell"><div class="hero-num-val" style="color:var(--blue)">12</div><div class="hero-num-label">Core Formulas</div></div>
+      <div class="hero-num-cell"><div class="hero-num-val" style="color:var(--teal)">8</div><div class="hero-num-label">Bonus Topics</div></div>
+      <div class="hero-num-cell"><div class="hero-num-val" style="color:var(--amber)">6</div><div class="hero-num-label">Case Studies</div></div>
+      <div class="hero-num-cell"><div class="hero-num-val" style="color:var(--coral)">10</div><div class="hero-num-label">System Types</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#cheat">Cheat Sheet</a>
+    <a href="#traffic">Traffic</a>
+    <a href="#storage">Storage</a>
+    <a href="#bandwidth">Bandwidth</a>
+    <a href="#cache">Cache & Servers</a>
+    <a href="#advanced">Advanced</a>
+    <a href="#availability">Availability</a>
+    <a href="#fanout">Fan-out</a>
+    <a href="#thundering">Thundering Herd</a>
+    <a href="#cost">Cost</a>
+    <a href="#systems">By System</a>
+    <a href="#framework">Framework</a>
+    <a href="#cases">Case Studies</a>
+    <a href="#thresholds">Thresholds</a>
+    <a href="#memory">Memory</a>
+    <a href="#mistakes">Mistakes</a>
+    <a href="#quickref">Quick Ref</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ══════════════════════════════════════════════
+     CHEAT SHEET
+══════════════════════════════════════════════ -->
+<div class="section" id="cheat">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--blue);background:var(--blue-bg);border-color:var(--blue-b)">01</span>
+    <h2 class="sec-title">The Cheat Sheet</h2>
+  </div>
+  <div class="g4" style="margin-bottom:16px;">
+    <div class="mem-card">
+      <div class="mem-hd">Data Sizes</div>
+      <div class="mem-body"><span class="bl">1 KB</span>  = <span class="hl">1,000 bytes</span>
+<span class="bl">1 MB</span>  = <span class="hl">1,000 KB</span>
+<span class="bl">1 GB</span>  = <span class="hl">1,000 MB</span>
+<span class="bl">1 TB</span>  = <span class="hl">1,000 GB</span>
+<span class="bl">1 PB</span>  = <span class="hl">1,000 TB</span>
+<span class="bl">1 EB</span>  = <span class="hl">1,000 PB</span></div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-hd">Number Sizes</div>
+      <div class="mem-body"><span class="bl">1 K      </span>= <span class="hl">1,000</span>       (3 zeros)
+<span class="bl">1 Million</span>= <span class="hl">1,000,000</span>   (6 zeros)
+<span class="bl">1 Billion</span>= <span class="hl">10^9</span>        (9 zeros)
+<span class="bl">1 Trillion</span>=<span class="hl">10^12</span>       (12 zeros)
+
+<span class="tl">100M × 10 = 1 Billion ← memorise</span></div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-hd">Time (Rounded)</div>
+      <div class="mem-body"><span class="bl">1 minute </span>= <span class="hl">60 sec</span>
+<span class="bl">1 hour   </span>= <span class="hl">3,600</span>  → use 4,000
+<span class="cl">★ 1 day  </span>= <span class="hl">86,400</span> → use <span class="cl">100,000</span>
+<span class="bl">1 month  </span>= <span class="hl">2.5M sec</span>
+<span class="bl">1 year   </span>= <span class="hl">30M sec</span>
+<span class="bl">5 years  </span>= <span class="hl">1,825 days</span></div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-hd">Object Sizes</div>
+      <div class="mem-body"><span class="bl">int32 / bool  </span><span class="hl">4 bytes</span>
+<span class="bl">int64 / double</span><span class="hl">8 bytes</span>
+<span class="bl">UUID (binary) </span><span class="hl">16 bytes</span>
+<span class="bl">UUID (string) </span><span class="hl">36 bytes</span>
+<span class="bl">Tweet / DB row</span><span class="hl">~500 bytes</span>
+<span class="bl">Photo (comp.) </span><span class="hl">~1 MB</span>
+<span class="bl">1 min video   </span><span class="hl">~10 MB</span>
+<span class="bl">1 hr video    </span><span class="hl">~1 GB raw</span></div>
+    </div>
+  </div>
+  <div class="alert alert-warn">
+    <div class="alert-icon">⚡</div>
+    <div class="alert-body"><strong>Golden Rule:</strong> Round aggressively. 86,400 → 100,000. Your job is to get the right order of magnitude, not the exact answer. Interviewers care about your thinking process, not your arithmetic. Being off by 2× is fine — being off by 100× or having no answer at all is not.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     TRAFFIC
+══════════════════════════════════════════════ -->
+<div class="section" id="traffic">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--blue);background:var(--blue-bg);border-color:var(--blue-b)">02</span>
+    <h2 class="sec-title">Traffic Calculations</h2>
+  </div>
+  <p class="intro">Traffic tells you how many requests per second hit your infrastructure. Always split reads and writes — they require completely different solutions.</p>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+
+    <!-- Write QPS -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--blue-bg);color:var(--blue)">1</div>
+        <div>
+          <div class="card-title">Write QPS — How fast data comes IN</div>
+          <div class="card-sub">New posts, messages, uploads per second</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Write QPS = (DAU × writes per user per day) ÷ 100,000</div>
+        <div class="code"><span class="c">Example — Twitter:</span>
+<span class="v">DAU</span>          = 100 Million
+<span class="v">Writers/day</span>  = 100M × 5% = 5 Million  <span class="c">(not everyone posts)</span>
+<span class="v">Writes/day</span>   = 5M × 1 tweet each
+<span class="r">Write QPS</span>    = 5,000,000 ÷ 100,000 = <span class="r">50 QPS</span></div>
+        <div class="sig-label" style="margin-top:12px">Architecture signal</div>
+        <div class="sig-item">&lt; 1K QPS → single DB handles writes easily</div>
+        <div class="sig-item">1K–10K QPS → consider write replicas or async buffering</div>
+        <div class="sig-item">&gt; 10K QPS → sharding or NoSQL (Cassandra/DynamoDB) needed</div>
+        <div class="sig-item">&gt; 100K QPS → queue-based ingestion (Kafka), never write direct to DB</div>
+      </div>
+    </div>
+
+    <!-- Read QPS -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--teal-bg);color:var(--teal)">2</div>
+        <div>
+          <div class="card-title">Read QPS — How fast data goes OUT</div>
+          <div class="card-sub">Feed loads, searches, profile views, API responses per second</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Read QPS = (DAU × reads per user per day) ÷ 100,000</div>
+        <div class="code"><span class="c">Example — Twitter:</span>
+<span class="v">DAU</span>         = 100 Million
+<span class="v">Reads/day</span>   = 100M × 10 refreshes = <span class="h">1 Billion</span>
+<span class="r">Read QPS</span>    = 1,000,000,000 ÷ 100,000 = <span class="r">10,000 QPS</span></div>
+        <div class="sig-label" style="margin-top:12px">Architecture signal</div>
+        <div class="sig-item">&lt; 1K QPS → single DB fine</div>
+        <div class="sig-item">1K–10K QPS → add Redis cache</div>
+        <div class="sig-item">&gt; 10K QPS → cache mandatory, CDN for media</div>
+        <div class="sig-item">&gt; 100K QPS → distributed cache cluster, edge caching</div>
+      </div>
+    </div>
+
+    <!-- Read:Write ratio -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--purple-bg);color:var(--purple)">3</div>
+        <div>
+          <div class="card-title">Read:Write Ratio — Which side dominates</div>
+          <div class="card-sub">Drives your entire architecture strategy — the most important single number</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Ratio = Read QPS ÷ Write QPS</div>
+        <div style="background:var(--surf2);border-radius:8px;overflow:hidden;margin-bottom:12px;">
+          <table class="tbl">
+            <thead><tr><th>Ratio</th><th>System</th><th>Strategy</th></tr></thead>
+            <tbody>
+              <tr><td><span class="tag" style="background:var(--green-bg);color:var(--green)">1:1</span></td><td style="color:var(--muted)">Messaging</td><td style="font-size:12px">Optimize both equally, persistent connections</td></tr>
+              <tr><td><span class="tag" style="background:var(--teal-bg);color:var(--teal)">10:1</span></td><td style="color:var(--muted)">E-commerce</td><td style="font-size:12px">Cache product catalog, CDN for images</td></tr>
+              <tr><td><span class="tag" style="background:var(--amber-bg);color:var(--amber)">100:1</span></td><td style="color:var(--muted)">News feed</td><td style="font-size:12px">Heavy Redis caching, pre-computed feeds</td></tr>
+              <tr><td><span class="tag" style="background:var(--coral-bg);color:var(--coral)">200:1</span></td><td style="color:var(--muted)">Twitter</td><td style="font-size:12px">Entire architecture read-optimised, fan-out on write</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concurrency -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--amber-bg);color:var(--amber)">4</div>
+        <div>
+          <div class="card-title">Concurrent Users — Active connections at once</div>
+          <div class="card-sub">Tells you thread pool size, connection pool, WebSocket server capacity</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Concurrent users = DAU × avg session duration (sec) ÷ 86,400</div>
+        <div class="code"><span class="c">Example — Twitter:</span>
+<span class="v">DAU</span>               = 100 Million
+<span class="v">Avg session</span>       = 10 minutes = 600 seconds
+<span class="r">Concurrent users</span>  = 100M × 600 ÷ 86,400 = <span class="r">~700,000</span>
+
+<span class="c">This means 700K simultaneous open connections</span>
+<span class="c">→ Each server handles ~10K connections</span>
+<span class="c">→ Need 700K ÷ 10K = 70 servers minimum</span></div>
+      </div>
+    </div>
+
+    <!-- Fan-out -->
+    <div class="card" id="fanout">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--pink-bg);color:var(--pink)">5</div>
+        <div>
+          <div class="card-title">Fan-out — Write amplification on social graphs</div>
+          <div class="card-sub">Critical for Twitter, Instagram, Facebook. 1 write → N writes to follower feeds</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Effective write QPS = base write QPS × avg followers per user</div>
+        <div class="code"><span class="c">Example — Twitter celebrity posts a tweet:</span>
+<span class="v">Base write QPS     </span>= 50
+<span class="v">Avg followers      </span>= 200
+
+<span class="h">Fan-out write QPS  </span>= 50 × 200 = <span class="w">10,000 fan-out writes/sec</span>
+
+<span class="c">BUT — Kylie Jenner has 380M followers:</span>
+<span class="w">1 tweet → 380M inbox writes in seconds</span>
+<span class="c">→ This is why Twitter uses hybrid fan-out</span>
+<span class="c">→ Celebrities: fan-out on read (pull at query time)</span>
+<span class="c">→ Regular users: fan-out on write (pre-push to feeds)</span></div>
+        <div class="alert alert-info" style="margin-top:12px;">
+          <div class="alert-icon">💡</div>
+          <div class="alert-body"><strong>Fan-out on Write:</strong> Push tweet to all followers' feed caches immediately. Fast reads. Expensive writes for celebrities.<br><br><strong>Fan-out on Read:</strong> Store tweet once, merge at read time. Slow reads. Cheap writes. Stale feeds until next load.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     STORAGE
+══════════════════════════════════════════════ -->
+<div class="section" id="storage">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--amber);background:var(--amber-bg);border-color:var(--amber-b)">03</span>
+    <h2 class="sec-title">Storage Calculations</h2>
+  </div>
+  <p class="intro">Storage tells you how much disk you need. Always estimate media separately — it dominates everything else by 10–100×.</p>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--amber-bg);color:var(--amber)">6</div>
+        <div>
+          <div class="card-title">Storage Per Day — Disk burned daily</div>
+          <div class="card-sub">List every field, sum bytes, add 30% buffer</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Storage/day = writes per day × bytes per item</div>
+        <div class="code"><span class="c">How to estimate bytes per item (always list fields):</span>
+<span class="f">tweet_id        </span>= 8 bytes  <span class="c">(int64)</span>
+<span class="f">user_id         </span>= 8 bytes
+<span class="f">text (280 chars)</span>= 300 bytes <span class="c">(1 byte per ASCII char)</span>
+<span class="f">timestamp       </span>= 8 bytes
+<span class="f">likes_count     </span>= 4 bytes  <span class="c">(int32)</span>
+<span class="f">retweet_count   </span>= 4 bytes
+<span class="f">is_reply, flags </span>= 4 bytes
+<span class="h">                ──────────</span>
+                = 336 bytes
+<span class="r">Round up 30%:   </span>= ~<span class="r">500 bytes</span> <span class="c">(extra fields, indexes, overhead)</span>
+
+<span class="c">5M tweets/day × 500 bytes = 2.5 GB/day (text only)</span></div>
+        <div class="sig-label" style="margin-top:12px">Architecture signal</div>
+        <div class="sig-item">&lt; 1 GB/day → single DB, no worries</div>
+        <div class="sig-item">1–100 GB/day → dedicated DB server, monitor growth</div>
+        <div class="sig-item">&gt; 1 TB/day → distributed storage mandatory (S3, HDFS)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--amber-bg);color:var(--amber)">7</div>
+        <div>
+          <div class="card-title">Storage Over N Years — Long-term capacity</div>
+          <div class="card-sub">Always plan 5 years. Interviewers always ask this.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Storage (N years) = storage/day × 365 × N</div>
+        <div class="code"><span class="c">Twitter example:</span>
+500 GB/day × 365 × 5 = 912,500 GB = <span class="r">~900 TB</span>
+
+<span class="c">Don't forget replication factor!</span>
+<span class="w">Actual disk</span> = logical storage × <span class="w">3</span>  <span class="c">(3 copies for durability)</span>
+= 900 TB × 3 = <span class="w">2.7 PB actual disk needed</span></div>
+        <div class="alert alert-warn" style="margin-top:12px;">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-body"><strong>Most people forget replication factor!</strong> Every byte you store is stored 3× in distributed systems (one primary + two replicas). Your logical storage × 3 = actual disk purchased. Always mention this — it signals real-world awareness.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--amber-bg);color:var(--amber)">8</div>
+        <div>
+          <div class="card-title">Metadata vs Payload Split — Hot vs Cold storage</div>
+          <div class="card-sub">Never store media in your DB. Store the URL, serve from object storage.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="code"><span class="c">Twitter media split:</span>
+<span class="f">Text tweets   </span>= 2.5 GB/day  → <span class="r">PostgreSQL / MySQL</span>
+<span class="f">Media (images)</span>= 500 GB/day  → <span class="r">Amazon S3 / GCS</span>
+<span class="f">Media (video) </span>= TB/day      → <span class="r">S3 + CDN</span>
+
+<span class="c">What goes in DB (hot, fast queries):</span>
+  tweet_id, user_id, text, timestamp, media_url (50 bytes)
+
+<span class="c">What goes in S3 (cold, cheap storage):</span>
+  actual image/video binary
+
+<span class="h">Cost difference: DB storage ~$200/GB/month</span>
+<span class="h">                S3 storage ~$0.023/GB/month</span>
+<span class="h">→ 8,000× cheaper to use S3 for media</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--amber-bg);color:var(--amber)">9</div>
+        <div>
+          <div class="card-title">Compression Ratio — Actual bytes on disk</div>
+          <div class="card-sub">Text compresses beautifully. Video is already compressed — don't double count.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="code"><span class="c">Compression ratios by data type:</span>
+<span class="f">Plain text (tweets, posts)</span>  → <span class="r">60–70% smaller</span> with gzip
+<span class="f">JSON API responses         </span>  → <span class="r">70–80% smaller</span> with gzip
+<span class="f">Images (already JPEG/WebP) </span>  → <span class="r">5–10% smaller</span> (already compressed)
+<span class="f">Video (already H.264/H.265)</span>  → <span class="r">0% benefit</span>
+
+<span class="c">Effective storage calculation:</span>
+<span class="v">Raw storage</span>    = 2.5 GB/day text
+<span class="v">After compress</span> = 2.5 × 0.3 = <span class="r">0.75 GB/day</span>
+
+<span class="c">For deduplication (Dropbox, Google Drive):</span>
+<span class="p">Dedup ratio    </span>= 30–70% for typical file storage
+<span class="p">Users often upload same file (memes, docs)</span>
+<span class="p">SHA-256 hash → detect and store only once</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     BANDWIDTH
+══════════════════════════════════════════════ -->
+<div class="section" id="bandwidth">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--teal);background:var(--teal-bg);border-color:var(--teal-b)">04</span>
+    <h2 class="sec-title">Bandwidth Calculations</h2>
+  </div>
+  <p class="intro">Bandwidth tells you how many bytes per second flow through your network. Egress costs money — this drives CDN decisions.</p>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--teal-bg);color:var(--teal)">10</div>
+        <div>
+          <div class="card-title">Ingress Bandwidth — Data flowing IN</div>
+          <div class="card-sub">Uploads, writes, messages incoming to your system</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Ingress BW = Write QPS × bytes per write</div>
+        <div class="code"><span class="c">Twitter example:</span>
+<span class="f">Text ingress:</span>  50 QPS × 500 bytes = <span class="r">25 KB/sec</span>
+<span class="f">Image uploads:</span> 5 images/sec × 1MB = <span class="r">5 MB/sec</span>
+<span class="f">Total ingress:</span> <span class="r">~5 MB/sec</span>  <span class="c">(trivially small vs egress)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--teal-bg);color:var(--teal)">11</div>
+        <div>
+          <div class="card-title">Egress Bandwidth — Data flowing OUT</div>
+          <div class="card-sub">The big one. Downloads, feed loads, video streams — this is what costs money.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Egress BW = Read QPS × bytes per response</div>
+        <div class="code"><span class="c">Twitter feed example:</span>
+<span class="v">Read QPS</span>        = 10,000
+<span class="v">Response size</span>   = 20 tweets × 500 bytes = 10,000 bytes
+<span class="r">Egress BW</span>       = 10,000 × 10,000 = <span class="r">100 MB/sec</span>
+
+<span class="c">What this costs on AWS (without CDN):</span>
+<span class="h">100 MB/sec × 86,400 sec/day = 8.6 TB/day egress</span>
+<span class="h">8.6 TB × $0.09/GB = $775/day = $23,000/month</span>
+<span class="c">With CDN (95% offload): $23,000 × 5% = $1,150/month ← use CDN!</span></div>
+        <div class="sig-label" style="margin-top:12px">Architecture signal</div>
+        <div class="sig-item">&lt; 1 MB/sec → single server handles egress fine</div>
+        <div class="sig-item">&gt; 10 MB/sec → CDN strongly recommended</div>
+        <div class="sig-item">&gt; 100 MB/sec → CDN mandatory, multi-region PoPs</div>
+        <div class="sig-item">&gt; 1 TB/sec → massive CDN (YouTube/Netflix scale), peer caching</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--teal-bg);color:var(--teal)">12</div>
+        <div>
+          <div class="card-title">Internal (East-West) Bandwidth — Between your own services</div>
+          <div class="card-sub">Microservices multiply your bandwidth internally. Often ignored, always matters.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="code"><span class="c">Each external request triggers multiple internal calls:</span>
+
+<span class="v">External request</span> → Twitter feed load
+  <span class="f">→ Auth service</span>         (verify JWT)
+  <span class="f">→ Timeline service</span>      (get tweet IDs)
+  <span class="f">→ User service</span>          (get user data)
+  <span class="f">→ Media service</span>         (get image URLs)
+  <span class="f">→ Recommendation service</span> (suggested tweets)
+<span class="h">= 5 internal calls per 1 external request</span>
+
+<span class="w">Internal BW</span> = Egress BW × internal fan-out
+= 100 MB/sec × 5 = <span class="w">500 MB/sec internal traffic</span>
+
+<span class="c">→ Internal network must be 10 Gbps minimum</span>
+<span class="c">→ Same-DC traffic is "free" but still has limits</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--teal-bg);color:var(--teal)">13</div>
+        <div>
+          <div class="card-title">CDN Offload Ratio — What actually hits your origin</div>
+          <div class="card-sub">The number that tells you what your servers really need to handle</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Origin BW = total egress × (1 - CDN cache hit rate)</div>
+        <div class="code"><span class="c">Twitter with CDN:</span>
+<span class="v">Total egress BW</span>    = 100 MB/sec
+<span class="v">CDN hit rate</span>       = 95%
+<span class="r">Origin BW</span>          = 100 MB/sec × (1 - 0.95) = <span class="r">5 MB/sec</span>
+
+<span class="c">→ Origin only needs to handle 5 MB/sec, not 100 MB/sec</span>
+<span class="c">→ This changes your server sizing by 20×</span>
+
+<span class="c">Cache hit rate benchmarks:</span>
+<span class="f">Static assets (JS/CSS/images)</span> → 95–99% hit rate
+<span class="f">User-specific data</span>            → 0% (can't cache)
+<span class="f">Public feeds (explore page)   </span> → 70–90% hit rate</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     CACHE & SERVERS
+══════════════════════════════════════════════ -->
+<div class="section" id="cache">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--green);background:var(--green-bg);border-color:var(--green-b)">05</span>
+    <h2 class="sec-title">Cache & Server Calculations</h2>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--green-bg);color:var(--green)">14</div>
+        <div>
+          <div class="card-title">Cache Size — RAM needed for Redis/Memcached</div>
+          <div class="card-sub">Pareto principle: 20% of data gets 80% of reads — cache only the hot 20%</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Cache size = hot items count × bytes per item
+Hot items  = total items × 0.20  (Pareto)</div>
+        <div class="code"><span class="c">Twitter example:</span>
+<span class="v">Tweets today</span>    = 5M new tweets
+<span class="v">Hot 20%</span>         = 1M hot tweets
+<span class="v">Bytes each</span>      = 500 bytes
+
+<span class="r">Cache size</span>      = 1,000,000 × 500 = <span class="r">500 MB</span>
+
+<span class="c">Single Redis instance handles this (up to ~100GB RAM)</span>
+<span class="c">For historical tweets feed: add user feed caches</span>
+<span class="f">User feed cache</span> = 100M users × top 100 tweet IDs × 8 bytes
+                = 100M × 800 bytes = <span class="r">80 GB</span>
+<span class="c">→ Redis Cluster with 3–4 nodes</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--green-bg);color:var(--green)">15</div>
+        <div>
+          <div class="card-title">Cache Hit Rate Impact — The real number that matters</div>
+          <div class="card-sub">Effective DB QPS is what your cache hit rate doesn't handle</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Effective DB read QPS = Read QPS × (1 - cache hit rate)</div>
+        <div class="code"><span class="c">Why this matters more than raw read QPS:</span>
+<span class="v">Read QPS</span>             = 10,000
+<span class="v">Cache hit rate</span>       = 95%
+<span class="r">DB read QPS</span>          = 10,000 × 0.05 = <span class="r">500 QPS</span>
+
+<span class="c">→ Single MySQL handles 500 QPS easily!</span>
+<span class="c">→ Without cache: 10,000 QPS → DB explodes</span>
+
+<span class="c">Cache hit rate targets:</span>
+<span class="f">Twitter feed     </span>→ aim for 95%+ (same tweets read many times)
+<span class="f">User profile     </span>→ 80–90% (profiles change rarely)
+<span class="f">E-commerce cart  </span>→ 0% (unique per user, can't cache)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--green-bg);color:var(--green)">16</div>
+        <div>
+          <div class="card-title">TTL — How long to cache data</div>
+          <div class="card-sub">Too long = stale data shown. Too short = cache provides no benefit.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="code"><span class="c">TTL by data type (how stale can it be?):</span>
+<span class="f">Static config / feature flags</span>  → <span class="r">24 hours</span>
+<span class="f">User profile / avatar         </span>  → <span class="r">5–15 minutes</span>
+<span class="f">Tweet / post content          </span>  → <span class="r">60 seconds</span>  <span class="c">(likes change)</span>
+<span class="f">Live seat availability        </span>  → <span class="r">0–5 seconds</span> <span class="c">(must be fresh)</span>
+<span class="f">Trending hashtags             </span>  → <span class="r">30 seconds</span>
+<span class="f">Search results                </span>  → <span class="r">2–5 minutes</span>
+<span class="f">Exchange rates / prices       </span>  → <span class="r">1 second</span>
+
+<span class="c">Add ±20% jitter to TTL to prevent thundering herd:</span>
+<span class="p">TTL = base_ttl × (1 + random(-0.2, 0.2))</span>
+<span class="c">→ Not all cache entries expire at same time</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--green-bg);color:var(--green)">17</div>
+        <div>
+          <div class="card-title">Server Count — How many app servers you need</div>
+          <div class="card-sub">Always add 2× headroom. Servers fail. Traffic spikes.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Servers = Peak QPS ÷ QPS per server × 2</div>
+        <div class="code"><span class="c">QPS per server (rough estimates):</span>
+<span class="f">API server (CPU-bound)     </span>= 5K–10K QPS
+<span class="f">API server (I/O-bound)     </span>= 20K–50K QPS
+<span class="f">Static file server         </span>= 100K+ QPS
+<span class="f">Redis (single instance)    </span>= 100K–1M QPS
+<span class="f">MySQL single node          </span>= 5K–10K QPS
+
+<span class="c">Example — Twitter:</span>
+<span class="v">Peak read QPS</span>   = 30,000 (3× average 10K)
+<span class="v">QPS per server</span>  = 10,000
+<span class="r">Servers needed</span>  = (30,000 ÷ 10,000) × 2 = <span class="r">6 servers</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--green-bg);color:var(--green)">18</div>
+        <div>
+          <div class="card-title">DB Connection Pool — The silent killer nobody mentions</div>
+          <div class="card-sub">Runs out before QPS does. Causes mysterious production outages.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="code"><span class="c">How connection exhaustion happens:</span>
+<span class="v">App servers        </span>= 10 servers
+<span class="v">Threads per server </span>= 50 threads
+<span class="h">Total DB connections</span>= 10 × 50 = <span class="h">500 connections to DB</span>
+
+<span class="w">PostgreSQL default max_connections = 100</span>
+<span class="bad">→ 500 > 100 → DB refuses connections → 500 errors!</span>
+
+<span class="c">Solutions:</span>
+<span class="r">PgBouncer</span>   = connection pooler, 500 app → 20 real DB connections
+<span class="r">RDS Proxy</span>   = AWS managed pooler
+<span class="r">HikariCP</span>    = Java connection pool library
+
+<span class="f">Safe formula:</span> app connections ≤ DB max_connections × 0.8
+<span class="c">Always mention this in interviews → instant senior signal</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--green-bg);color:var(--green)">19</div>
+        <div>
+          <div class="card-title">DB Shard Count — When one DB isn't enough</div>
+          <div class="card-sub">Plan your sharding strategy before you need it</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Shard count = total storage ÷ max per shard</div>
+        <div class="code"><span class="c">Twitter example:</span>
+<span class="v">5yr storage</span>    = 900 TB
+<span class="v">Max per shard  </span>= 1 TB (beyond this, queries slow dramatically)
+<span class="r">Shards needed  </span>= 900 ÷ 1 = <span class="r">900 shards</span>
+
+<span class="c">→ Consistent hashing to distribute users across shards</span>
+<span class="c">→ user_id % 900 = which shard to write to</span>
+<span class="c">→ Need to plan for rebalancing as data grows</span>
+
+<span class="c">QPS-based sharding threshold:</span>
+<span class="h">MySQL</span>  = maxes at ~10K QPS → shard when approaching this
+<span class="h">Mongo  </span>= maxes at ~30K QPS per node
+<span class="h">Cassandra</span> = designed for horizontal sharding from day one</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     ADVANCED TOPICS
+══════════════════════════════════════════════ -->
+<div class="section" id="advanced">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--purple);background:var(--purple-bg);border-color:var(--purple-b)">06</span>
+    <h2 class="sec-title">Advanced Calculations (Senior Rounds)</h2>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+
+    <!-- Latency Budget -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--purple-bg);color:var(--purple)">20</div>
+        <div>
+          <div class="card-title">Latency Budget — Break your SLA into components</div>
+          <div class="card-sub">Forces you to justify every layer. If numbers don't fit, architecture must change.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="code"><span class="c">Example — 100ms SLA breakdown:</span>
+<span class="f">DNS lookup                 </span>=  5ms  <span class="c">(cached after first request)</span>
+<span class="f">TCP handshake              </span>=  5ms  <span class="c">(same DC) / 80ms (India→US)</span>
+<span class="f">TLS 1.3 handshake          </span>=  5ms  <span class="c">(TLS 1.2 = 10ms)</span>
+<span class="f">Network (client → server)  </span>= 10ms
+<span class="f">Load balancer              </span>=  2ms
+<span class="f">App server processing      </span>= 15ms
+<span class="f">Cache lookup (Redis)       </span>=  1ms  <span class="c">(in-memory, same DC)</span>
+<span class="f">DB query (cache miss)      </span>= 10ms
+<span class="f">Network (server → client)  </span>= 10ms
+<span class="f">Browser render             </span>= 20ms
+<span class="h">─────────────────────────────────</span>
+<span class="r">Total                      </span>= <span class="r">83ms ✓ within 100ms SLA</span>
+
+<span class="c">If DB needs 50ms → doesn't fit → must cache → cache mandatory</span>
+<span class="c">If users are in India → +160ms RTT → must use edge/CDN</span></div>
+      </div>
+    </div>
+
+    <!-- Replication Lag -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--purple-bg);color:var(--purple)">21</div>
+        <div>
+          <div class="card-title">Replication Lag Tolerance — Consistency model choice</div>
+          <div class="card-sub">How stale can reads be? Drives your entire DB and consistency architecture.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="code"><span class="c">Tolerance by system type:</span>
+<span class="bad">0ms (Zero tolerance)</span>   → Payment, inventory, seat booking
+                        → Synchronous replication
+                        → PostgreSQL with synchronous_commit=on
+                        → Higher latency, never stale
+
+<span class="h">100–500ms              </span>→ Social feed, messaging read receipts
+                        → Async replication
+                        → MySQL read replicas
+                        → Slightly stale, much faster reads
+
+<span class="f">Minutes–Hours          </span>→ Analytics dashboards, reports
+                        → Batch ETL pipelines
+                        → Data warehouse (Redshift, BigQuery)
+                        → Very stale ok, extremely cheap
+
+<span class="p">CAP Theorem implication:</span>
+<span class="c">→ Choose Consistency: payments, bookings (CP system)</span>
+<span class="c">→ Choose Availability: social feeds, likes (AP system)</span></div>
+      </div>
+    </div>
+
+    <!-- Data Growth -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--purple-bg);color:var(--purple)">22</div>
+        <div>
+          <div class="card-title">Data Growth Rate — Future-proofing your architecture</div>
+          <div class="card-sub">Design for 3× your current load. Plan sharding before you need it.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="formula">Future QPS = current QPS × growth_rate ^ years</div>
+        <div class="code"><span class="c">Growth rate benchmarks:</span>
+<span class="f">Hypergrowth startup  </span>= 3× per year
+<span class="f">Growing product      </span>= 1.5–2× per year
+<span class="f">Mature product       </span>= 1.1–1.3× per year
+
+<span class="c">Example — startup at 1,000 QPS today:</span>
+<span class="v">Year 1</span>: 1,000 × 3   = 3,000 QPS
+<span class="v">Year 2</span>: 3,000 × 3   = 9,000 QPS
+<span class="v">Year 3</span>: 9,000 × 3   = <span class="w">27,000 QPS</span>
+
+<span class="c">→ Plan sharding now, even if you don't need it today</span>
+<span class="c">→ Much harder to shard a live production DB</span></div>
+      </div>
+    </div>
+
+    <!-- Throughput vs Latency -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:var(--purple-bg);color:var(--purple)">23</div>
+        <div>
+          <div class="card-title">Throughput vs Latency Trade-off</div>
+          <div class="card-sub">Batching increases throughput but adds latency. Choose based on SLA.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="code"><span class="c">Kafka batching example:</span>
+<span class="f">Batch size 1</span>    → 1,000 msg/sec throughput, <span class="r">5ms latency</span>
+<span class="f">Batch size 100</span>  → 50,000 msg/sec throughput, <span class="h">50ms latency</span>
+<span class="f">Batch size 1000</span> → 200,000 msg/sec throughput, <span class="w">500ms latency</span>
+
+<span class="c">Decision framework:</span>
+<span class="r">Use small batches (low latency):</span>
+  → Real-time notifications, chat messages, payments
+
+<span class="h">Use large batches (high throughput):</span>
+  → Analytics events, logs, metrics, bulk imports
+
+<span class="c">Little's Law — relates throughput, concurrency, latency:</span>
+<span class="p">Concurrency = Throughput × Latency</span>
+<span class="c">If throughput doubles and latency stays same → need 2× servers</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     AVAILABILITY
+══════════════════════════════════════════════ -->
+<div class="section" id="availability">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--red);background:var(--red-bg);border-color:var(--red-b)">07</span>
+    <h2 class="sec-title">Availability & Reliability</h2>
+  </div>
+  <p class="intro">Availability SLAs drive replica count, failover strategy, and backup frequency. Always state your target — interviewers expect this.</p>
+
+  <div style="background:var(--surf);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;">
+    <table class="tbl">
+      <thead><tr><th>SLA</th><th>Downtime/Year</th><th>Downtime/Month</th><th>Downtime/Week</th><th>Architecture implication</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="tag" style="background:var(--red-bg);color:var(--red)">99%</span></td>
+          <td class="mono">3.65 days</td><td class="mono">7.3 hours</td><td class="mono">1.68 hours</td>
+          <td style="font-size:12px">Single server, manual recovery ok</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--amber-bg);color:var(--amber)">99.9%</span></td>
+          <td class="mono">8.7 hours</td><td class="mono">43 min</td><td class="mono">10 min</td>
+          <td style="font-size:12px">Load balancer + 2 servers, basic failover</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--teal-bg);color:var(--teal)">99.99%</span></td>
+          <td class="mono">52 min</td><td class="mono">4.4 min</td><td class="mono">1 min</td>
+          <td style="font-size:12px">Multi-AZ, auto-failover, &lt;1 min recovery — FAANG target</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--green-bg);color:var(--green)">99.999%</span></td>
+          <td class="mono">5.2 min</td><td class="mono">26 sec</td><td class="mono">6 sec</td>
+          <td style="font-size:12px">Multi-region active-active, zero manual intervention</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code" style="margin-bottom:14px;"><span class="c">MTTR / MTBF — Recovery time calculations:</span>
+<span class="f">MTTR</span>  = Mean Time To Recovery   <span class="c">(how long to fix a failure)</span>
+<span class="f">MTBF</span>  = Mean Time Between Failures <span class="c">(how often it breaks)</span>
+
+<span class="p">Availability</span> = MTBF ÷ (MTBF + MTTR)
+
+<span class="c">To achieve 99.99%:</span>
+<span class="v">Target MTTR</span>       = under 1 minute
+<span class="v">Requires</span>           = automated failover (not human paging someone)
+<span class="r">Solution</span>           = multi-AZ deployment, health checks, auto-scaling
+
+<span class="c">Replica count for durability:</span>
+<span class="f">Replication factor 1</span>  → data lost if server dies (never do this)
+<span class="f">Replication factor 2</span>  → survives 1 failure (minimum)
+<span class="f">Replication factor 3</span>  → survives 2 simultaneous failures (standard)
+<span class="h">Kafka, Cassandra, HDFS all default to RF=3</span></div>
+
+  <div class="alert alert-info">
+    <div class="alert-icon">💡</div>
+    <div class="alert-body"><strong>Compound availability:</strong> If service A is 99.9% and service B is 99.9%, together they're only 99.9% × 99.9% = 99.8%. Every dependency you add reduces your availability. This is why microservices need circuit breakers (Hystrix, Resilience4j).</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     THUNDERING HERD
+══════════════════════════════════════════════ -->
+<div class="section" id="thundering">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--coral);background:var(--coral-bg);border-color:var(--coral-b)">08</span>
+    <h2 class="sec-title">Thundering Herd Problem</h2>
+  </div>
+  <p class="intro">The most common cache-related production incident. When your cache expires, all requests simultaneously slam your DB. This is what takes down systems at scale.</p>
+
+  <div class="code" style="margin-bottom:16px;"><span class="c">The problem — Normal operation:</span>
+<span class="v">Read QPS</span>       = 10,000
+<span class="v">Cache hit rate</span> = 95%
+<span class="r">DB load</span>        = 10,000 × 5% = <span class="r">500 QPS → DB fine</span>
+
+<span class="bad">The problem — Cache cold start (server restart, mass expiry):</span>
+<span class="w">Read QPS</span>       = 10,000
+<span class="w">Cache hit rate</span> = 0%  <span class="c">(cache just came back empty)</span>
+<span class="bad">DB load        = 10,000 × 100% = 10,000 QPS → DB DIES</span></div>
+
+  <div class="g2" style="margin-bottom:16px;">
+    <div class="fbox">
+      <div class="fbox-label">Solution 1 — TTL Jitter (easiest)</div>
+      <div class="code" style="margin-bottom:0;font-size:11px;">base_ttl = 300 seconds
+jitter   = random(-60, +60)
+actual_ttl = base_ttl + jitter
+
+<span class="c">→ Cache entries expire at random times</span>
+<span class="c">→ No thundering herd at expiry</span>
+<span class="r">★ Always do this</span></div>
+    </div>
+    <div class="fbox">
+      <div class="fbox-label">Solution 2 — Mutex / Cache Lock</div>
+      <div class="code" style="margin-bottom:0;font-size:11px;">if cache_miss:
+  if acquire_lock("rebuild:key"):
+    result = query_db()
+    cache_set(key, result)
+    release_lock()
+  else:
+    wait_and_retry()  <span class="c"># others wait</span>
+
+<span class="c">→ Only ONE request rebuilds cache</span>
+<span class="c">→ All others wait, then read cache</span></div>
+    </div>
+    <div class="fbox">
+      <div class="fbox-label">Solution 3 — Stale While Revalidate</div>
+      <div class="code" style="margin-bottom:0;font-size:11px;">if cache_expired:
+  <span class="r">serve stale data immediately</span>
+  async: refresh_cache_in_background()
+
+<span class="c">→ User never waits for cache rebuild</span>
+<span class="c">→ Sees slightly stale data for seconds</span>
+<span class="c">→ Used by most CDNs and browsers</span></div>
+    </div>
+    <div class="fbox">
+      <div class="fbox-label">Solution 4 — Cache Warming</div>
+      <div class="code" style="margin-bottom:0;font-size:11px;">on_server_start():
+  <span class="r">pre_load_top_1000_items_into_cache()</span>
+  then_open_traffic()
+
+on_cache_near_expiry():
+  <span class="r">proactively_refresh()</span>  <span class="c"># before it expires</span>
+
+<span class="c">→ Cache is never cold</span>
+<span class="c">→ Requires predicting what to warm</span></div>
+    </div>
+  </div>
+
+  <div class="alert alert-danger">
+    <div class="alert-icon">🔥</div>
+    <div class="alert-body"><strong>Real-world impact:</strong> This has taken down Amazon, Facebook, and almost every company at scale. If you mention thundering herd + at least one solution in an interview, you immediately signal senior-level thinking. Most candidates at junior/mid level have never heard of it.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     COST ESTIMATION
+══════════════════════════════════════════════ -->
+<div class="section" id="cost">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--amber);background:var(--amber-bg);border-color:var(--amber-b)">09</span>
+    <h2 class="sec-title">Cost Estimation</h2>
+  </div>
+  <p class="intro">Rarely covered but interviewers love it. Shows you understand real-world constraints — not just technical correctness but also business viability.</p>
+
+  <div class="mem-card" style="margin-bottom:16px;">
+    <div class="mem-hd">AWS Pricing (Rough Reference — 2024)</div>
+    <div class="mem-body"><span class="tl">S3 storage         </span><span class="hl">~$0.023/GB/month</span>
+<span class="tl">EBS (SSD)          </span><span class="hl">~$0.10/GB/month</span>
+<span class="tl">RDS (db.r5.large)  </span><span class="hl">~$250/month</span>
+<span class="tl">EC2 (m5.large)     </span><span class="hl">~$70/month</span>
+<span class="tl">ElastiCache Redis  </span><span class="hl">~$100/month (r6g.large)</span>
+<span class="tl">Data transfer OUT  </span><span class="hl">~$0.09/GB (egress)</span>
+<span class="tl">CloudFront CDN     </span><span class="hl">~$0.01/GB (much cheaper!)</span>
+<span class="tl">Lambda             </span><span class="hl">~$0.20 per 1M requests</span></div>
+  </div>
+
+  <div class="code"><span class="c">Twitter cost estimate example:</span>
+<span class="f">Storage (900 TB text, 5yr)  </span>= 900,000 GB × $0.023 = <span class="h">$20,700/month</span>
+<span class="f">Storage (media, much more)  </span>= ~10x more = <span class="h">~$207,000/month</span>
+<span class="f">Egress (100 MB/sec)         </span>= 8,640 GB/day × $0.09 = <span class="h">$777/day without CDN</span>
+<span class="f">CDN (95% offload)           </span>= 8,640 GB × $0.01 × 5% = <span class="r">$4.32/day ← massive saving</span>
+<span class="f">App servers (6 × m5.xlarge)</span>= 6 × $140 = <span class="h">$840/month</span>
+<span class="f">RDS (primary + replica)     </span>= 2 × $500 = <span class="h">$1,000/month</span>
+<span class="f">Redis cluster (3 nodes)     </span>= 3 × $300 = <span class="h">$900/month</span>
+<span class="h">────────────────────────────────────────</span>
+<span class="c">Rough monthly total         </span>= ~$250,000/month (simplified!)
+
+<span class="c">Key takeaways:</span>
+<span class="r">→ Media storage dominates cost</span>
+<span class="r">→ CDN reduces egress cost by ~95%</span>
+<span class="r">→ Compression on text saves 60–70% storage cost</span>
+<span class="r">→ Cold storage (S3 Glacier) for old data = 10× cheaper</span></div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     SYSTEM TYPES
+══════════════════════════════════════════════ -->
+<div class="section" id="systems">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--pink);background:var(--pink-bg);border-color:var(--pink-b)">10</span>
+    <h2 class="sec-title">What to Calculate Per System Type</h2>
+  </div>
+  <div style="background:var(--surf);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <table class="tbl">
+      <thead><tr><th>System</th><th>Must Calculate</th><th>Key Insight</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="tag" style="background:var(--blue-bg);color:var(--blue)">Social Feed</span><br><span style="font-size:11px;color:var(--dim)">Twitter, Instagram</span></td>
+          <td><div class="mono">Write QPS, Read QPS<br>Read:Write ratio<br>Fan-out ratio<br>Storage/day, Egress</div></td>
+          <td style="font-size:12px">200:1 read-heavy → cache everything, pre-compute feeds. Fan-out on write vs read for celebrities.</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--teal-bg);color:var(--teal)">Messaging</span><br><span style="font-size:11px;color:var(--dim)">WhatsApp, Slack</span></td>
+          <td><div class="mono">Messages/sec, Storage<br>Latency budget<br>Fan-out (group msgs)<br>Concurrent connections</div></td>
+          <td style="font-size:12px">Delivery SLA strict → WebSockets. Fan-out in groups (1000 member group = 1000 deliveries). Offline storage needed.</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--amber-bg);color:var(--amber)">Video Platform</span><br><span style="font-size:11px;color:var(--dim)">YouTube, Netflix</span></td>
+          <td><div class="mono">Upload BW, Storage/day<br>Encoding pipeline<br>Egress BW, CDN offload<br>5yr storage</div></td>
+          <td style="font-size:12px">Media is everything. Encoding workers needed per upload. CDN is not optional. Tiered storage (hot/warm/cold) essential.</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--coral-bg);color:var(--coral)">Ride Sharing</span><br><span style="font-size:11px;color:var(--dim)">Uber, Lyft</span></td>
+          <td><div class="mono">Location updates/sec<br>Geo query QPS<br>Match latency budget<br>Storage/day</div></td>
+          <td style="font-size:12px">1M GPS writes/sec → Cassandra, not SQL. Geohash for proximity queries. Match must happen in &lt;5 seconds.</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--purple-bg);color:var(--purple)">Ticketing</span><br><span style="font-size:11px;color:var(--dim)">BookMyShow</span></td>
+          <td><div class="mono">Peak QPS at drop<br>Concurrency, Cache size<br>Lock contention<br>DB connection pool</div></td>
+          <td style="font-size:12px">Flash sale = 400× normal traffic. Virtual queue essential. 2.5MB inventory fits in Redis. Optimistic locking at DB layer.</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--green-bg);color:var(--green)">URL Shortener</span><br><span style="font-size:11px;color:var(--dim)">Bitly, TinyURL</span></td>
+          <td><div class="mono">Write QPS, Read QPS<br>Ratio, Code length<br>Storage 5yr<br>Redirect latency</div></td>
+          <td style="font-size:12px">10:1 read-heavy. Base62 7-char code = 3.5T unique URLs. Cache hot URLs for &lt;10ms redirect. Single DB sufficient.</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--blue-bg);color:var(--blue)">Search</span><br><span style="font-size:11px;color:var(--dim)">Elastic, Google</span></td>
+          <td><div class="mono">Index size, Query QPS<br>Latency budget<br>Crawl/index rate<br>Shard count</div></td>
+          <td style="font-size:12px">Index size drives shard count. Inverted index is core data structure. 1KB avg page × 10B pages = 10PB index (Google scale).</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--pink-bg);color:var(--pink)">Payments</span><br><span style="font-size:11px;color:var(--dim)">Stripe, UPI</span></td>
+          <td><div class="mono">TPS, Replication lag<br>Idempotency keys<br>Audit log storage<br>Availability SLA</div></td>
+          <td style="font-size:12px">Zero lag tolerance → synchronous replication. Idempotency key prevents double charge. 99.999% SLA target. Every txn logged forever.</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--amber-bg);color:var(--amber)">File Storage</span><br><span style="font-size:11px;color:var(--dim)">Dropbox, Drive</span></td>
+          <td><div class="mono">Upload BW, Storage<br>Dedup ratio<br>Chunking size<br>Sync delta</div></td>
+          <td style="font-size:12px">Block-level dedup saves 30–70%. 4MB chunks for sync. Only upload changed blocks, not full file. S3 backend always.</td>
+        </tr>
+        <tr>
+          <td><span class="tag" style="background:var(--teal-bg);color:var(--teal)">Notifications</span><br><span style="font-size:11px;color:var(--dim)">Push, Email, SMS</span></td>
+          <td><div class="mono">Events/sec, Fan-out<br>Delivery SLA<br>Retry budget<br>Queue depth</div></td>
+          <td style="font-size:12px">1 event → millions of push notifications. Use Kafka for fan-out. Retry with exponential backoff. Handle unsubscribes.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     FRAMEWORK
+══════════════════════════════════════════════ -->
+<div class="section" id="framework">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--teal);background:var(--teal-bg);border-color:var(--teal-b)">11</span>
+    <h2 class="sec-title">The Universal Framework</h2>
+  </div>
+  <p class="intro">Use this exact sequence for every BOTE question. Never skip a step. Talk out loud at every step — interviewers want to hear your thinking.</p>
+
+  <div class="card">
+    <div style="display:flex;flex-direction:column;">
+      <div class="fw-step">
+        <div class="fw-num" style="background:var(--blue-bg);color:var(--blue)">1</div>
+        <div>
+          <div class="fw-title">Clarify & State Assumptions</div>
+          <div class="fw-desc">Before calculating anything, state what you're assuming. "I'll assume 500M registered users with 20% DAU, so 100M daily active users." Interviewers can correct you here — they want you to ask questions, not just calculate.</div>
+          <div class="fw-formula">Ask: scale? read-heavy or write-heavy? global or single region? any spiky events?</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num" style="background:var(--teal-bg);color:var(--teal)">2</div>
+        <div>
+          <div class="fw-title">Establish Users (DAU/MAU)</div>
+          <div class="fw-desc">Total users → DAU. Everything else multiplies off this number. A 10× error here cascades everywhere.</div>
+          <div class="fw-formula">DAU = total × active_rate (10–20% consumer, 50%+ messaging, 5% B2B)</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num" style="background:var(--amber-bg);color:var(--amber)">3</div>
+        <div>
+          <div class="fw-title">Define Actions — Reads AND Writes Separately</div>
+          <div class="fw-desc">How many times does each DAU read and write per day? Be specific. "10 feed refreshes" and "1 post" are different numbers with different implications.</div>
+          <div class="fw-formula">writes/day = DAU × writes/user | reads/day = DAU × reads/user</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num" style="background:var(--coral-bg);color:var(--coral)">4</div>
+        <div>
+          <div class="fw-title">Size Per Item — List Every Field</div>
+          <div class="fw-desc">Don't say "about 1KB". List each field with its byte count. Sum them. Add 30% for fields you forgot. This discipline separates strong candidates from weak ones.</div>
+          <div class="fw-formula">total bytes = Σ(field sizes) × 1.3</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num" style="background:var(--purple-bg);color:var(--purple)">5</div>
+        <div>
+          <div class="fw-title">Calculate Daily Numbers</div>
+          <div class="fw-desc">Simple multiplication. writes/day × bytes/item = storage/day. reads/day stays separate.</div>
+          <div class="fw-formula">storage/day = writes/day × bytes | reads/day = DAU × reads/user</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num" style="background:var(--green-bg);color:var(--green)">6</div>
+        <div>
+          <div class="fw-title">Convert to Per Second (QPS)</div>
+          <div class="fw-desc">Divide by 100,000 (rounded 1 day). Now you have numbers you can compare against infrastructure limits.</div>
+          <div class="fw-formula">QPS = daily count ÷ 100,000</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num" style="background:var(--pink-bg);color:var(--pink)">7</div>
+        <div>
+          <div class="fw-title">Scale Out — Peak and Long-Term</div>
+          <div class="fw-desc">Multiply QPS by 3 for peak. Multiply storage by 365×5 for 5-year planning. Multiply by 3 for replication factor. These are the numbers that define your infrastructure.</div>
+          <div class="fw-formula">peak QPS = avg × 3 | storage 5yr = /day × 1,825 | actual disk = logical × 3</div>
+        </div>
+      </div>
+      <div class="fw-step" style="border-bottom:none;">
+        <div class="fw-num" style="background:var(--amber-bg);color:var(--amber)">8</div>
+        <div>
+          <div class="fw-title">Conclude — Connect Every Number to a Decision</div>
+          <div class="fw-desc">Never leave a number floating. Every single number must connect to a specific technology or architecture decision. This is what separates system design from arithmetic.</div>
+          <div class="fw-formula">Number → Bottleneck → Technology choice → Justification</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     CASE STUDIES
+══════════════════════════════════════════════ -->
+<div class="section" id="cases">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--coral);background:var(--coral-bg);border-color:var(--coral-b)">12</span>
+    <h2 class="sec-title">Case Studies — Full Step-by-Step</h2>
+  </div>
+
+  <!-- TWITTER -->
+  <div class="case">
+    <div class="case-hd" style="border-left-color:var(--blue);">
+      <div class="case-icon" style="background:var(--blue-bg);">🐦</div>
+      <div>
+        <div class="case-title">Twitter / X</div>
+        <div class="case-desc">Posts, feeds, follows. The classic read-heavy social system. Fan-out on write vs read is the core design challenge.</div>
+        <div class="case-tags">
+          <span class="tag" style="background:var(--blue-bg);color:var(--blue)">Social Feed</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Read-Heavy 200:1</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Fan-out Problem</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="case-steps">
+        <div><div class="step-hd">Users</div>
+        <div class="code"><span class="v">Registered:</span> 500M | <span class="v">DAU (20%):</span> <span class="r">100M DAU</span></div></div>
+        <div><div class="step-hd">Write Traffic</div>
+        <div class="code">5% of DAU post → 5M writers × 1 tweet = <span class="h">5M writes/day</span>
+<span class="r">Write QPS</span> = 5,000,000 ÷ 100,000 = <span class="r">50 QPS</span></div></div>
+        <div><div class="step-hd">Read Traffic</div>
+        <div class="code">100M DAU × 10 refreshes = <span class="h">1 Billion reads/day</span>
+<span class="r">Read QPS</span>  = 1,000,000,000 ÷ 100,000 = <span class="r">10,000 QPS</span>
+<span class="r">Ratio</span>     = 10,000 ÷ 50 = <span class="r">200:1 read-heavy</span></div></div>
+        <div><div class="step-hd">Storage Per Item</div>
+        <div class="code"><span class="f">tweet_id</span>=8 | <span class="f">user_id</span>=8 | <span class="f">text</span>=300 | <span class="f">timestamp</span>=8 | <span class="f">counts</span>=8 → round to <span class="r">500 bytes</span></div></div>
+        <div><div class="step-hd">Storage Per Day</div>
+        <div class="code"><span class="f">Text:</span>  5M × 500 bytes     = <span class="r">2.5 GB/day</span>
+<span class="f">Media:</span> 500K imgs × 1 MB  = <span class="r">500 GB/day</span>  <span class="c">← media dominates 200×</span>
+<span class="f">Total:</span> <span class="r">~500 GB/day</span></div></div>
+        <div><div class="step-hd">5 Year Storage + Replication</div>
+        <div class="code">500 GB × 365 × 5 = 912,500 GB = <span class="r">~900 TB logical</span>
+× replication factor 3       = <span class="w">~2.7 PB actual disk</span></div></div>
+        <div><div class="step-hd">Bandwidth</div>
+        <div class="code"><span class="f">Egress:</span> 10,000 QPS × (20 tweets × 500B) = 10,000 × 10KB = <span class="r">100 MB/sec</span></div></div>
+      </div>
+      <table class="res-tbl">
+        <thead><tr><th>Metric</th><th>Result</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Write QPS</td><td><span class="rnum" style="color:var(--green)">50/sec</span></td><td style="font-size:12px">Single DB handles writes fine</td></tr>
+          <tr><td>Read QPS</td><td><span class="rnum" style="color:var(--amber)">10,000/sec</span></td><td style="font-size:12px">Redis cache mandatory, read replicas</td></tr>
+          <tr><td>Read:Write</td><td><span class="rnum" style="color:var(--coral)">200:1</span></td><td style="font-size:12px">Fan-out on write for regular users</td></tr>
+          <tr><td>Storage/day</td><td><span class="rnum" style="color:var(--teal)">~500 GB</span></td><td style="font-size:12px">S3 for media, URL only in DB</td></tr>
+          <tr><td>Egress BW</td><td><span class="rnum" style="color:var(--pink)">100 MB/sec</span></td><td style="font-size:12px">CDN mandatory, multi-region PoPs</td></tr>
+          <tr><td>Actual disk (5yr)</td><td><span class="rnum" style="color:var(--purple)">~2.7 PB</span></td><td style="font-size:12px">Distributed storage, tiered hot/cold</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- WHATSAPP -->
+  <div class="case">
+    <div class="case-hd" style="border-left-color:var(--teal);">
+      <div class="case-icon" style="background:var(--teal-bg);">💬</div>
+      <div>
+        <div class="case-title">WhatsApp</div>
+        <div class="case-desc">1:1 and group messaging. Strict delivery guarantees. Fan-out in group chats. Offline message storage.</div>
+        <div class="case-tags">
+          <span class="tag" style="background:var(--teal-bg);color:var(--teal)">Messaging</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Latency Critical</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Group Fan-out</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="case-steps">
+        <div><div class="step-hd">Traffic</div>
+        <div class="code"><span class="v">DAU:</span> 2B × 50% = <span class="r">1B DAU</span>
+<span class="v">Messages/day:</span> 1B × 20 = <span class="h">20 Billion</span>
+<span class="r">Write QPS:</span> 20B ÷ 100K = <span class="r">200,000 QPS</span></div></div>
+        <div><div class="step-hd">Message Size</div>
+        <div class="code"><span class="f">msg_id</span>=8 | <span class="f">sender_id</span>=8 | <span class="f">receiver_id</span>=8 | <span class="f">content</span>=100 | <span class="f">timestamp</span>=8 | <span class="f">status</span>=1 → <span class="r">200 bytes</span></div></div>
+        <div><div class="step-hd">Storage</div>
+        <div class="code"><span class="f">Text:</span> 20B × 200B = <span class="r">4 TB/day</span>
+<span class="f">Media (20%):</span> 4B × 500KB = <span class="r">~2 PB/day</span>  <span class="c">← media again dominates</span></div></div>
+        <div><div class="step-hd">Group Fan-out (the hard problem)</div>
+        <div class="code"><span class="c">1 message to 256-person group = 256 deliveries</span>
+<span class="w">Fan-out multiplier</span> = 256×
+<span class="h">Effective delivery QPS</span> = 200K × 256 = <span class="w">51M delivery ops/sec</span>
+<span class="c">→ This is why WhatsApp queues deliveries asynchronously</span>
+<span class="c">→ Kafka per-user delivery queue</span></div></div>
+        <div><div class="step-hd">Latency Budget</div>
+        <div class="code"><span class="c">Target: message delivered in &lt;500ms</span>
+<span class="f">Client→server</span>=50ms | <span class="f">server</span>=5ms | <span class="f">DB write</span>=10ms | <span class="f">push</span>=50ms | <span class="f">server→client</span>=50ms
+<span class="r">Total = 165ms ✓ well within 500ms SLA</span></div></div>
+      </div>
+      <table class="res-tbl">
+        <thead><tr><th>Metric</th><th>Result</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Write QPS</td><td><span class="rnum" style="color:var(--coral)">200K/sec</span></td><td style="font-size:12px">Cassandra (50K QPS/node × 4 nodes)</td></tr>
+          <tr><td>Storage/day</td><td><span class="rnum" style="color:var(--amber)">~2 PB</span></td><td style="font-size:12px">S3 for all media, never DB</td></tr>
+          <tr><td>Group fan-out</td><td><span class="rnum" style="color:var(--pink)">51M ops/sec</span></td><td style="font-size:12px">Kafka queued async delivery per user</td></tr>
+          <tr><td>Latency</td><td><span class="rnum" style="color:var(--green)">165ms</span></td><td style="font-size:12px">WebSockets for persistent connections</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- YOUTUBE -->
+  <div class="case">
+    <div class="case-hd" style="border-left-color:var(--coral);">
+      <div class="case-icon" style="background:var(--coral-bg);">📹</div>
+      <div>
+        <div class="case-title">YouTube</div>
+        <div class="case-desc">Upload, transcode, serve video globally. Storage and egress bandwidth dominate all other considerations.</div>
+        <div class="case-tags">
+          <span class="tag" style="background:var(--coral-bg);color:var(--coral)">Video Platform</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Storage Dominant</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Encoding Pipeline</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="case-steps">
+        <div><div class="step-hd">Upload Rate (real public stat — memorise)</div>
+        <div class="code"><span class="h">500 hours of video uploaded every minute</span>
+= 500 × 60 = 30,000 hrs/hour = <span class="r">8.3 hrs of video per second</span></div></div>
+        <div><div class="step-hd">Storage Per Hour of Video</div>
+        <div class="code"><span class="f">Raw 1080p</span>              = 1 GB/hr
+<span class="f">Encode to 360/480/720/1080/4K</span> = 4× multiplier
+<span class="r">Stored per hour</span>        = <span class="r">4 GB</span></div></div>
+        <div><div class="step-hd">Storage Per Day & 5 Years</div>
+        <div class="code">30,000 hrs/hr × 4 GB = 120 TB/hr × 24 = <span class="r">~3 PB/day</span>
+3 PB × 365 × 5                            = <span class="r">~5.5 Exabytes (5yr)</span>
+× replication factor 3                    = <span class="w">~16.5 Exabytes actual disk</span></div></div>
+        <div><div class="step-hd">Egress Bandwidth</div>
+        <div class="code">1B DAU × 30 min/day = 30B min/day
+30B ÷ 1,440 = <span class="h">20.8M concurrent viewers</span>
+20.8M × 1 Mbps (720p) = <span class="r">20.8 Tbps egress</span>
+<span class="c">→ 100s of CDN PoPs worldwide, peer-to-peer caching</span></div></div>
+        <div><div class="step-hd">Encoding Workers Needed</div>
+        <div class="code"><span class="c">Each uploaded hour takes ~4 hours to encode to all formats</span>
+<span class="v">8.3 hrs video/sec</span> × 4 encode time = <span class="h">33 hrs of encoding work/sec</span>
+Each worker encodes <span class="v">1 hr/hr</span> = need <span class="r">33 encoding workers running continuously</span>
+<span class="c">→ Async queue (SQS/Kafka) → encoding worker pool → S3 output</span></div></div>
+      </div>
+      <table class="res-tbl">
+        <thead><tr><th>Metric</th><th>Result</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Storage/day</td><td><span class="rnum" style="color:var(--coral)">~3 PB</span></td><td style="font-size:12px">GCS/S3, tiered storage (hot/warm/cold)</td></tr>
+          <tr><td>Actual disk (5yr)</td><td><span class="rnum" style="color:var(--red)">~16.5 EB</span></td><td style="font-size:12px">Archive old videos to Glacier (10× cheaper)</td></tr>
+          <tr><td>Egress BW</td><td><span class="rnum" style="color:var(--amber)">20 Tbps</span></td><td style="font-size:12px">Massive CDN (hundreds of PoPs globally)</td></tr>
+          <tr><td>Encoding</td><td><span class="rnum" style="color:var(--teal)">33+ workers</span></td><td style="font-size:12px">Kafka → encoding fleet → S3 async pipeline</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- UBER -->
+  <div class="case">
+    <div class="case-hd" style="border-left-color:var(--amber);">
+      <div class="case-icon" style="background:var(--amber-bg);">🚗</div>
+      <div>
+        <div class="case-title">Uber</div>
+        <div class="case-desc">Real-time GPS tracking + geo-matching. Write-heavy time-series data. Match latency is the core constraint.</div>
+        <div class="case-tags">
+          <span class="tag" style="background:var(--amber-bg);color:var(--amber)">Ride Sharing</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">1M writes/sec</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Geo Index Critical</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="case-steps">
+        <div><div class="step-hd">Location Updates</div>
+        <div class="code"><span class="v">Active drivers:</span> 5M | update every 5 sec
+<span class="r">Location write QPS:</span> 5,000,000 ÷ 5 = <span class="r">1,000,000 QPS (1M/sec)</span></div></div>
+        <div><div class="step-hd">Update Size</div>
+        <div class="code"><span class="f">driver_id</span>=8 | <span class="f">lat</span>=8 | <span class="f">lng</span>=8 | <span class="f">timestamp</span>=8 | <span class="f">bearing</span>=4 | <span class="f">speed</span>=4 → <span class="r">50 bytes</span></div></div>
+        <div><div class="step-hd">Storage</div>
+        <div class="code">1M × 50B = <span class="r">50 MB/sec write bandwidth</span>
+50 MB/sec × 100K = <span class="r">5 TB/day location data</span>
+<span class="c">→ Time-series DB (InfluxDB, Cassandra), NOT relational SQL</span></div></div>
+        <div><div class="step-hd">Geo Queries (Riders Finding Drivers)</div>
+        <div class="code"><span class="v">10M active riders</span> poll every 5 sec
+<span class="r">Geo query QPS:</span> 10,000,000 ÷ 5 = <span class="r">2,000,000 QPS (2M/sec)</span>
+<span class="c">→ Geohash / S2 geometry cells → Redis Geosearch (O(N+log M))</span>
+<span class="c">→ Each query: "find drivers within 2km radius" = geohash prefix match</span></div></div>
+        <div><div class="step-hd">Match Latency Budget</div>
+        <div class="code"><span class="c">User taps "Request Ride" → driver assigned in &lt;5 seconds</span>
+<span class="f">Geo query          </span>= 50ms
+<span class="f">Driver ranking     </span>= 20ms
+<span class="f">Push to driver app </span>= 200ms
+<span class="f">Driver response    </span>= 3000ms  <span class="c">(human!)</span>
+<span class="f">Confirm to rider   </span>= 100ms
+<span class="h">Total              </span>= <span class="h">~3.4 sec ✓</span></div></div>
+      </div>
+      <table class="res-tbl">
+        <thead><tr><th>Metric</th><th>Result</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Write QPS</td><td><span class="rnum" style="color:var(--coral)">1M/sec</span></td><td style="font-size:12px">Cassandra (100K+ QPS per node)</td></tr>
+          <tr><td>Storage/day</td><td><span class="rnum" style="color:var(--amber)">5 TB</span></td><td style="font-size:12px">Time-series DB with TTL (keep 30 days)</td></tr>
+          <tr><td>Geo queries</td><td><span class="rnum" style="color:var(--teal)">2M/sec</span></td><td style="font-size:12px">Redis GEO + S2 geometry for proximity</td></tr>
+          <tr><td>Match latency</td><td><span class="rnum" style="color:var(--green)">&lt;5 sec</span></td><td style="font-size:12px">Async push notification, driver queue</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- URL SHORTENER -->
+  <div class="case">
+    <div class="case-hd" style="border-left-color:var(--green);">
+      <div class="case-icon" style="background:var(--green-bg);">🔗</div>
+      <div>
+        <div class="case-title">URL Shortener</div>
+        <div class="case-desc">The baseline system design problem. Simple enough to practice all calculations, interesting enough for interview variety.</div>
+        <div class="case-tags">
+          <span class="tag" style="background:var(--green-bg);color:var(--green)">URL Shortener</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Read-Heavy 10:1</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Small Storage</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="case-steps">
+        <div><div class="step-hd">Traffic</div>
+        <div class="code"><span class="v">DAU:</span> 10M | 1% create URLs | 99% click
+<span class="r">Write QPS:</span> 100,000 ÷ 100K = <span class="r">1 QPS</span>
+<span class="r">Read QPS:</span>  1,000,000 ÷ 100K = <span class="r">10 QPS</span>  |  Ratio: <span class="r">10:1</span></div></div>
+        <div><div class="step-hd">Storage</div>
+        <div class="code"><span class="f">short_code</span>=7B | <span class="f">long_url</span>=512B | <span class="f">user_id</span>=8B | <span class="f">timestamps</span>=16B → <span class="r">600 bytes/row</span>
+100K × 600B = 60 MB/day | 5yr = 60 MB × 1825 = <span class="r">~110 GB</span> (tiny!)</div></div>
+        <div><div class="step-hd">Code Space (Base62)</div>
+        <div class="code"><span class="c">Base62 = a-z + A-Z + 0-9 = 62 characters</span>
+<span class="f">7 chars:</span> 62^7 = <span class="h">3.5 Trillion</span> unique codes
+<span class="f">Need:</span>    100K/day × 365 × 5 = <span class="v">182 Million</span>
+<span class="r">3.5T >> 182M → 7 chars is way more than enough</span>
+
+<span class="c">Why not 6 chars? 62^6 = 56 Billion — still fine but less headroom</span>
+<span class="c">Why not random UUID? Too long for a "short" URL!</span></div></div>
+      </div>
+      <table class="res-tbl">
+        <thead><tr><th>Metric</th><th>Result</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Write QPS</td><td><span class="rnum" style="color:var(--green)">1/sec</span></td><td style="font-size:12px">Any DB works — SQLite could handle this!</td></tr>
+          <tr><td>Read QPS</td><td><span class="rnum" style="color:var(--blue)">10/sec</span></td><td style="font-size:12px">Cache hot URLs in Redis for &lt;1ms redirect</td></tr>
+          <tr><td>5yr storage</td><td><span class="rnum" style="color:var(--teal)">110 GB</span></td><td style="font-size:12px">Single DB node, never need to shard</td></tr>
+          <tr><td>Code space</td><td><span class="rnum" style="color:var(--purple)">3.5T codes</span></td><td style="font-size:12px">Base62 7-char codes, counter + hash</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BOOKMYSHOW -->
+  <div class="case">
+    <div class="case-hd" style="border-left-color:var(--purple);">
+      <div class="case-icon" style="background:var(--purple-bg);">🎟️</div>
+      <div>
+        <div class="case-title">BookMyShow — Ticket Booking</div>
+        <div class="case-desc">The concurrency and flash-sale problem. Normal traffic is trivial. The design challenge is 1M users hitting buy in 10 seconds.</div>
+        <div class="case-tags">
+          <span class="tag" style="background:var(--purple-bg);color:var(--purple)">Ticketing</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Flash Sale 400× spike</span>
+          <span class="tag" style="background:var(--surf3);color:var(--muted)">Concurrency Critical</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="case-steps">
+        <div><div class="step-hd">Normal vs Flash Sale Traffic</div>
+        <div class="code"><span class="c">Normal day:</span>
+<span class="v">5M DAU</span> × 5 views = 25M/day ÷ 100K = <span class="r">250 QPS</span>
+
+<span class="c">Flash sale (Coldplay drops tickets):</span>
+<span class="h">1M users</span> all click buy in 10 seconds
+<span class="r">Peak QPS</span> = 1,000,000 ÷ 10 = <span class="r">100,000 QPS</span>
+
+<span class="w">Peak = 400× normal → normal infra collapses completely</span></div></div>
+        <div><div class="step-hd">Seat Inventory in Cache</div>
+        <div class="code"><span class="c">Venue: 50,000 seats</span>
+<span class="f">seat_id</span>=8 | <span class="f">status</span>=1 | <span class="f">price</span>=8 | <span class="f">version</span>=4 → <span class="r">50 bytes/seat</span>
+50,000 × 50 = <span class="r">2.5 MB total inventory</span>
+<span class="c">→ Entire inventory fits in Redis 1000× over</span>
+<span class="c">→ All seat reads served from Redis, DB only for final write</span></div></div>
+        <div><div class="step-hd">Virtual Queue Math</div>
+        <div class="code"><span class="c">1M users wanting 50K seats:</span>
+<span class="v">95% of users</span> will get rejected → design for graceful rejection
+<span class="v">Queue position</span> = user enters queue, gets a number
+<span class="v">Only top 60K</span> (50K seats + 20% buffer) get to checkout page
+<span class="c">→ Reduces DB pressure from 1M concurrent to 60K</span>
+<span class="c">→ Redis ZADD for sorted queue by join_time</span></div></div>
+        <div><div class="step-hd">DB Connection Pool Warning</div>
+        <div class="code"><span class="c">At 100K QPS even from queue:</span>
+<span class="v">App servers</span> = 20 (scaled up for flash sale)
+<span class="v">Threads each</span> = 50
+<span class="w">DB connections</span> = 20 × 50 = <span class="bad">1,000 connections</span>
+<span class="bad">Postgres default = 100 → instant 500 errors</span>
+<span class="r">Solution: PgBouncer connection pooler</span></div></div>
+      </div>
+      <table class="res-tbl">
+        <thead><tr><th>Metric</th><th>Result</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Normal QPS</td><td><span class="rnum" style="color:var(--green)">250/sec</span></td><td style="font-size:12px">Single DB fine, Redis for catalog cache</td></tr>
+          <tr><td>Peak QPS</td><td><span class="rnum" style="color:var(--red)">100K/sec</span></td><td style="font-size:12px">Virtual queue (Redis ZADD) before DB</td></tr>
+          <tr><td>Inventory</td><td><span class="rnum" style="color:var(--purple)">2.5 MB</span></td><td style="font-size:12px">Full inventory in Redis, sub-ms reads</td></tr>
+          <tr><td>Concurrency</td><td><span class="rnum" style="color:var(--amber)">1M vs 50K</span></td><td style="font-size:12px">Optimistic locking at DB commit layer</td></tr>
+          <tr><td>Connections</td><td><span class="rnum" style="color:var(--coral)">1,000 needed</span></td><td style="font-size:12px">PgBouncer pooler, keep DB connections ≤100</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     DECISION THRESHOLDS
+══════════════════════════════════════════════ -->
+<div class="section" id="thresholds">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--amber);background:var(--amber-bg);border-color:var(--amber-b)">13</span>
+    <h2 class="sec-title">Complete Decision Thresholds</h2>
+  </div>
+  <p class="intro">Every number you calculate should trigger one of these decisions. Use this as your "so what" guide.</p>
+
+  <div style="background:var(--surf);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <table class="tbl">
+      <thead><tr><th>When you see this number...</th><th>It means...</th><th>Solution</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag" style="background:var(--green-bg);color:var(--green)">&lt; 1K read QPS</span></td><td style="font-size:12px">Single DB handles reads fine</td><td style="font-size:12px">No action needed</td></tr>
+        <tr><td><span class="tag" style="background:var(--teal-bg);color:var(--teal)">&gt; 5K read QPS</span></td><td style="font-size:12px">DB reads becoming bottleneck</td><td style="font-size:12px">Add Redis cache layer</td></tr>
+        <tr><td><span class="tag" style="background:var(--amber-bg);color:var(--amber)">&gt; 10K read QPS</span></td><td style="font-size:12px">DB will be overwhelmed</td><td style="font-size:12px">Cache mandatory + read replicas</td></tr>
+        <tr><td><span class="tag" style="background:var(--coral-bg);color:var(--coral)">&gt; 100K read QPS</span></td><td style="font-size:12px">Even Redis struggling</td><td style="font-size:12px">Redis Cluster + CDN edge caching</td></tr>
+        <tr><td><span class="tag" style="background:var(--green-bg);color:var(--green)">&lt; 1K write QPS</span></td><td style="font-size:12px">Any single DB handles writes</td><td style="font-size:12px">No action needed</td></tr>
+        <tr><td><span class="tag" style="background:var(--amber-bg);color:var(--amber)">&gt; 5K write QPS</span></td><td style="font-size:12px">Relational DB write ceiling</td><td style="font-size:12px">Async writes via queue (Kafka)</td></tr>
+        <tr><td><span class="tag" style="background:var(--coral-bg);color:var(--coral)">&gt; 10K write QPS</span></td><td style="font-size:12px">MySQL/Postgres at their limit</td><td style="font-size:12px">Shard DB or switch to Cassandra</td></tr>
+        <tr><td><span class="tag" style="background:var(--red-bg);color:var(--red)">&gt; 100K write QPS</span></td><td style="font-size:12px">Extreme write volume</td><td style="font-size:12px">Kafka ingest → batch write to DB</td></tr>
+        <tr><td><span class="tag" style="background:var(--blue-bg);color:var(--blue)">Ratio &gt; 100:1</span></td><td style="font-size:12px">Very read-heavy system</td><td style="font-size:12px">Pre-compute results, cache aggressively</td></tr>
+        <tr><td><span class="tag" style="background:var(--purple-bg);color:var(--purple)">Ratio &gt; 200:1</span></td><td style="font-size:12px">Extremely read-heavy (Twitter)</td><td style="font-size:12px">Fan-out on write, denormalize everything</td></tr>
+        <tr><td><span class="tag" style="background:var(--green-bg);color:var(--green)">&lt; 1 GB/day storage</span></td><td style="font-size:12px">Tiny storage, no worries</td><td style="font-size:12px">Single DB, revisit in 2 years</td></tr>
+        <tr><td><span class="tag" style="background:var(--amber-bg);color:var(--amber)">&gt; 100 GB/day storage</span></td><td style="font-size:12px">Growing fast, plan ahead</td><td style="font-size:12px">Separate media to S3, plan sharding</td></tr>
+        <tr><td><span class="tag" style="background:var(--coral-bg);color:var(--coral)">&gt; 1 TB/day storage</span></td><td style="font-size:12px">Large-scale data</td><td style="font-size:12px">Distributed storage (HDFS/S3) mandatory</td></tr>
+        <tr><td><span class="tag" style="background:var(--teal-bg);color:var(--teal)">&gt; 10 MB/sec egress</span></td><td style="font-size:12px">Origin serving too much</td><td style="font-size:12px">CDN strongly recommended</td></tr>
+        <tr><td><span class="tag" style="background:var(--coral-bg);color:var(--coral)">&gt; 100 MB/sec egress</span></td><td style="font-size:12px">Server cannot keep up</td><td style="font-size:12px">CDN mandatory, multi-region PoPs</td></tr>
+        <tr><td><span class="tag" style="background:var(--purple-bg);color:var(--purple)">Latency SLA &lt; 50ms</span></td><td style="font-size:12px">No time for DB call</td><td style="font-size:12px">In-memory cache only, never DB on hot path</td></tr>
+        <tr><td><span class="tag" style="background:var(--blue-bg);color:var(--blue)">Replication lag = 0</span></td><td style="font-size:12px">Strong consistency needed</td><td style="font-size:12px">Synchronous replication, accept write latency</td></tr>
+        <tr><td><span class="tag" style="background:var(--amber-bg);color:var(--amber)">DAU &gt; 10M</span></td><td style="font-size:12px">User table getting large</td><td style="font-size:12px">Shard by user_id, plan partitioning</td></tr>
+        <tr><td><span class="tag" style="background:var(--red-bg);color:var(--red)">Peak = 400× normal</span></td><td style="font-size:12px">Flash sale / viral traffic</td><td style="font-size:12px">Virtual queue, circuit breakers, autoscale</td></tr>
+        <tr><td><span class="tag" style="background:var(--teal-bg);color:var(--teal)">DB connections &gt; 80% max</span></td><td style="font-size:12px">Connection exhaustion coming</td><td style="font-size:12px">PgBouncer / RDS Proxy immediately</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     MEMORY
+══════════════════════════════════════════════ -->
+<div class="section" id="memory">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--teal);background:var(--teal-bg);border-color:var(--teal-b)">14</span>
+    <h2 class="sec-title">Numbers Worth Memorising</h2>
+  </div>
+  <div class="g3">
+    <div class="mem-card">
+      <div class="mem-hd">Real Platform Stats</div>
+      <div class="mem-body"><span class="bl">WhatsApp  </span><span class="hl">1B DAU</span>, 100B msg/day
+<span class="bl">Facebook  </span><span class="hl">2B DAU</span>
+<span class="bl">Instagram </span><span class="hl">500M DAU</span>
+<span class="bl">Twitter   </span><span class="hl">250M DAU</span>
+<span class="bl">YouTube   </span><span class="hl">2B users</span>
+<span class="bl">Netflix   </span><span class="hl">250M subscribers</span>
+<span class="bl">Uber      </span><span class="hl">5M active drivers</span>
+<span class="bl">Airbnb    </span><span class="hl">150M users</span></div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-hd">DB QPS Limits (Single Node)</div>
+      <div class="mem-body"><span class="bl">MySQL / Postgres  </span><span class="hl">5K–10K QPS</span>
+<span class="bl">Redis             </span><span class="gl">100K–1M QPS</span>
+<span class="bl">Cassandra/node    </span><span class="hl">50K QPS</span>
+<span class="bl">MongoDB           </span><span class="hl">10K–30K QPS</span>
+<span class="bl">DynamoDB          </span><span class="gl">virtually unlimited</span>
+<span class="bl">Elasticsearch     </span><span class="hl">1K–5K QPS</span>
+<span class="bl">Kafka broker      </span><span class="gl">1M+ msg/sec</span></div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-hd">Network Latency</div>
+      <div class="mem-body"><span class="bl">Same rack          </span><span class="gl">&lt;0.5ms</span>
+<span class="bl">Same datacenter    </span><span class="gl">1–2ms</span>
+<span class="bl">Same region (AZ)   </span><span class="gl">3–5ms</span>
+<span class="bl">US → Europe        </span><span class="hl">~80ms RTT</span>
+<span class="bl">US → India         </span><span class="hl">~160ms RTT</span>
+<span class="bl">US → Australia     </span><span class="hl">~200ms RTT</span>
+<span class="bl">4G mobile          </span><span class="hl">10–50ms</span></div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-hd">Object Sizes</div>
+      <div class="mem-body"><span class="bl">bool / int32       </span><span class="hl">1–4 bytes</span>
+<span class="bl">int64 / double     </span><span class="hl">8 bytes</span>
+<span class="bl">UUID binary        </span><span class="hl">16 bytes</span>
+<span class="bl">UUID string        </span><span class="hl">36 bytes</span>
+<span class="bl">Tweet text         </span><span class="hl">~300 bytes</span>
+<span class="bl">DB row avg         </span><span class="hl">500B – 2KB</span>
+<span class="bl">JSON API response  </span><span class="hl">1–10 KB</span></div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-hd">Media Sizes</div>
+      <div class="mem-body"><span class="bl">Thumbnail (100×100)</span><span class="hl">10 KB</span>
+<span class="bl">Profile photo      </span><span class="hl">100–300 KB</span>
+<span class="bl">Feed photo (comp.) </span><span class="hl">~1 MB</span>
+<span class="bl">1 min video (360p) </span><span class="hl">5 MB</span>
+<span class="bl">1 min video (720p) </span><span class="hl">10 MB</span>
+<span class="bl">1 hr video (1080p) </span><span class="hl">1 GB raw</span>
+<span class="bl">1 hr video (all)   </span><span class="hl">4 GB (encoded)</span></div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-hd">Important Public Figures</div>
+      <div class="mem-body"><span class="bl">YouTube uploads    </span><span class="cl">500 hrs/min</span>
+<span class="bl">Gmail users        </span><span class="hl">1.8B</span>
+<span class="bl">Google searches    </span><span class="hl">8.5B/day</span>
+<span class="bl">Tweets/day         </span><span class="hl">500M</span>
+<span class="bl">WhatsApp msgs/day  </span><span class="hl">100B</span>
+<span class="bl">Amazon orders/day  </span><span class="hl">~28M</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     MISTAKES
+══════════════════════════════════════════════ -->
+<div class="section" id="mistakes">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--red);background:var(--red-bg);border-color:var(--red-b)">15</span>
+    <h2 class="sec-title">Common Mistakes — What Kills Your Interview</h2>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Leaving numbers floating without a conclusion</div>
+    <div class="mis-bad">❌  "We'll have 10,000 read QPS."</div>
+    <div class="mis-good">✓  "10,000 read QPS exceeds MySQL's ~5K QPS limit, so we need a Redis cache layer and read replicas to protect the DB."</div>
+    <div class="mis-note">Every number must connect to a specific architecture decision. Numbers without conclusions are just arithmetic — not system design.</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Forgetting the replication factor (3×)</div>
+    <div class="mis-bad">❌  "We need 900 TB of storage."</div>
+    <div class="mis-good">✓  "900 TB logical storage × replication factor 3 = 2.7 PB actual disk to purchase."</div>
+    <div class="mis-note">Every byte in a distributed system is stored 3 times. Forgetting this makes your capacity plan 3× too small.</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Ignoring media — it always dominates by 100–1000×</div>
+    <div class="mis-bad">❌  Calculating only text storage and stopping there.</div>
+    <div class="mis-good">✓  Always ask: "Does this system have images or video?" Twitter text = 2.5 GB/day. Twitter media = 500 GB/day. Media is 200× larger.</div>
+    <div class="mis-note">On any social or content platform, media always dominates storage, bandwidth, and cost decisions.</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Using total registered users instead of DAU</div>
+    <div class="mis-bad">❌  "Twitter has 500M users so 500M requests per day."</div>
+    <div class="mis-good">✓  "500M registered × 20% daily active = 100M DAU. Size infrastructure for active users, not accounts created in 2009."</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Guessing object sizes instead of listing fields</div>
+    <div class="mis-bad">❌  "A tweet is about 1 KB I think."</div>
+    <div class="mis-good">✓  List: tweet_id(8) + user_id(8) + text(300) + timestamp(8) + counts(8) = 332 bytes → round to 500.</div>
+    <div class="mis-note">The discipline of field-level estimation signals rigorous thinking. Guessing signals you're not systematic.</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Not accounting for peak traffic (3× average)</div>
+    <div class="mis-bad">❌  Sizing servers for average load only.</div>
+    <div class="mis-good">✓  "Average is 10K QPS, peak is 30K QPS. I'll size for 30K. BookMyShow sees 400× at flash sales."</div>
+    <div class="mis-note">Systems that work at average load and die at peak are production outages waiting to happen.</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Forgetting DB connection pool exhaustion</div>
+    <div class="mis-bad">❌  Designing 50 app servers, never checking if DB can accept 50×50=2,500 connections.</div>
+    <div class="mis-good">✓  "Postgres default is 100 connections. 50 servers × 50 threads = 2,500 needed. Must add PgBouncer."</div>
+    <div class="mis-note">This causes mysterious 500 errors in production and nobody knows why. Mentioning it signals real-world experience.</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Ignoring the thundering herd on cache expiry</div>
+    <div class="mis-bad">❌  Adding a cache and thinking the problem is solved.</div>
+    <div class="mis-good">✓  "When cache expires, 10K QPS hits the DB simultaneously. Must add TTL jitter + stale-while-revalidate."</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Not asking about consistency requirements before designing</div>
+    <div class="mis-bad">❌  Jumping straight to adding read replicas for everything.</div>
+    <div class="mis-good">✓  "First: is eventual consistency ok for this use case? Payments: no → sync replication. Feed: yes → async replicas."</div>
+    <div class="mis-note">Consistency requirements completely change your DB choice. Ask first, then design.</div>
+  </div>
+
+  <div class="mistake">
+    <div class="mis-title">Never mentioning cost or business constraints</div>
+    <div class="mis-bad">❌  Designing an infinitely scalable system with no regard for cost.</div>
+    <div class="mis-good">✓  "Without CDN our egress is $23K/month. With CDN it drops to $1,150/month. CDN is clearly worth it."</div>
+    <div class="mis-note">Senior engineers think about cost. Mentioning even rough cost estimates signals real-world awareness.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════
+     QUICK REF
+══════════════════════════════════════════════ -->
+<div class="section" id="quickref">
+  <div class="sec-head">
+    <span class="sec-tag" style="color:var(--blue);background:var(--blue-bg);border-color:var(--blue-b)">16</span>
+    <h2 class="sec-title">Quick Reference Card</h2>
+  </div>
+  <div class="qr">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:24px;">All formulas — print this and stick it on your wall</div>
+    <div class="qr-grid">
+      <div>
+        <div class="qr-sec-title" style="color:var(--blue)">Traffic</div>
+        <div class="qr-lines">Write QPS <span class="eq">=</span> DAU×writes÷100K
+Read QPS  <span class="eq">=</span> DAU×reads÷100K
+Ratio     <span class="eq">=</span> ReadQPS÷WriteQPS
+Concurrent<span class="eq">=</span> DAU×session÷86400
+Fan-out   <span class="eq">=</span> writeQPS×followers</div>
+      </div>
+      <div>
+        <div class="qr-sec-title" style="color:var(--amber)">Storage</div>
+        <div class="qr-lines">Per day   <span class="eq">=</span> writes×bytes
+Per year  <span class="eq">=</span> per_day×365
+5 years   <span class="eq">=</span> per_day×1825
+Actual    <span class="eq">=</span> logical×3 (replication)
+Compress  <span class="eq">=</span> text×0.3, video×1.0</div>
+      </div>
+      <div>
+        <div class="qr-sec-title" style="color:var(--teal)">Bandwidth</div>
+        <div class="qr-lines">Ingress   <span class="eq">=</span> writeQPS×bytes
+Egress    <span class="eq">=</span> readQPS×resp_size
+Internal  <span class="eq">=</span> egress×microsvcs
+OriginBW  <span class="eq">=</span> egress×(1-CDNhit%)</div>
+      </div>
+      <div>
+        <div class="qr-sec-title" style="color:var(--green)">Cache & Servers</div>
+        <div class="qr-lines">Cache     <span class="eq">=</span> hot_items×bytes
+Hot items <span class="eq">=</span> total×0.20
+EffDB QPS <span class="eq">=</span> readQPS×(1-hitRate)
+Servers   <span class="eq">=</span> peakQPS÷qps_svr×2
+Shards    <span class="eq">=</span> storage÷max_shard</div>
+      </div>
+      <div>
+        <div class="qr-sec-title" style="color:var(--coral)">Time Constants</div>
+        <div class="qr-lines">1 day     <span class="eq">=</span> 100,000 sec
+1 year    <span class="eq">=</span> 30,000,000 sec
+Peak      <span class="eq">=</span> average × 3
+5yr days  <span class="eq">=</span> 1,825 days
+Growth    <span class="eq">=</span> current × rate^yrs</div>
+      </div>
+      <div>
+        <div class="qr-sec-title" style="color:var(--purple)">Availability</div>
+        <div class="qr-lines">99%       <span class="eq">=</span> 3.65 days down/yr
+99.9%     <span class="eq">=</span> 8.7 hours/yr
+99.99%    <span class="eq">=</span> 52 min/yr (FAANG)
+99.999%   <span class="eq">=</span> 5 min/yr
+Compound  <span class="eq">=</span> A×B (each dep reduces)</div>
+      </div>
+      <div>
+        <div class="qr-sec-title" style="color:var(--pink)">Decision Triggers</div>
+        <div class="qr-lines">&gt;5K RdQPS <span class="eq">→</span> add Redis
+&gt;10MB/s   <span class="eq">→</span> CDN
+&gt;1TB/day  <span class="eq">→</span> distrib storage
+&gt;200:1    <span class="eq">→</span> precompute feeds
+&gt;10K WrQPS<span class="eq">→</span> shard DB</div>
+      </div>
+      <div>
+        <div class="qr-sec-title" style="color:var(--amber)">DB Limits (Single)</div>
+        <div class="qr-lines">MySQL     <span class="eq">=</span> 5K–10K QPS
+Postgres  <span class="eq">=</span> 5K–10K QPS
+Redis     <span class="eq">=</span> 100K–1M QPS
+Cassandra <span class="eq">=</span> 50K QPS/node
+DynamoDB  <span class="eq">=</span> unlimited (managed)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<div class="footer">
+  System Design BOTE — Complete Reference — Save as system-design-bote-complete.html — Open in any browser offline
+</div>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const el=document.querySelector(a.getAttribute('href'));
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+</body>
+</html>
